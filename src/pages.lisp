@@ -59,7 +59,7 @@
         (format out "<a href='~a~a' class='cat-card' style='--accent: ~a'>~a</a>~%"
                 base-url slug color name)))))
 
-(defun page-index ()
+(defun page-index (user)
   (cl-who:with-html-output-to-string (s nil :prologue "<!DOCTYPE html>")
     (cl-who:htm
      (:html :lang "ru"
@@ -68,16 +68,33 @@
         (:meta :name "viewport" :content "width=device-width, initial-scale=1")
         (:title "lisper.ru")
         (:link :rel "icon" :type "image/svg+xml" :href *favicon-data-uri*)
+        (:script :src "https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.4/purify.min.js"
+                 :integrity "sha384-eEu5CTj3qGvu9PdJuS+YlkNi7d2XxQROAFYOr59zgObtlcux1ae1Il3u7jvdCSWu"
+                 :crossorigin "anonymous")
         (:style (cl-who:str (generate-css))))
       (:body
         (:div :class "container"
-         (:header
-          (:div :class "logo-container"
-           (cl-who:str *logo-svg*))
-            (:h1 "Common Lisp - язык для тех, кто думает")
-            (:div :class "header-buttons"
-             (:a :class "try-button" :href "javascript:void(0)" :onclick "openRepl()" "Попробовать CL")
-             (:a :class "telegram-link" :href "https://t.me/commonlisp_ru" "Telegram")))
+        (:header
+         (:div :class "site-header"
+          (:div :class "header-left"
+           (:a :href "/" :class "header-logo"
+            (cl-who:str *logo-svg*)))
+          (:nav :class "header-nav"
+           (:a :href "javascript:void(0)" :onclick "openRepl()"
+            (:span :class "nav-icon" (cl-who:str "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 19h8'/><path d='m4 17 6-6-6-6'/></svg>")) " Попробовать CL")
+           (:a :href "tg://resolve?domain=commonlisp_ru"
+            (:span :class "nav-icon" (cl-who:str "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 240 240'><circle cx='120' cy='120' r='120' fill='#229ED9'/><path d='M81.229,128.772l14.237,39.406s1.78,3.687,3.686,3.687,30.255-29.492,30.255-29.492l31.525-60.89L81.737,118.6Z' fill='#c8daea'/><path d='M100.106,138.878l-2.733,29.046s-1.144,8.9,7.754,0,17.415-15.763,17.415-15.763' fill='#a9c6d8'/><path d='M81.486,130.178,52.2,120.636s-3.5-1.42-2.373-4.64c.232-.664.7-1.229,2.1-2.2,6.489-4.523,120.106-45.36,120.106-45.36s3.208-1.081,5.1-.362a2.766,2.766,0,0,1,1.885,2.055,9.357,9.357,0,0,1,.254,2.585c-.009.752-.1,1.449-.169,2.542-.692,11.165-21.4,94.493-21.4,94.493s-1.239,4.876-5.678,5.043A8.13,8.13,0,0,1,146.1,172.5c-8.711-7.493-38.819-27.727-45.472-32.177a1.27,1.27,0,0,1-.546-.9c-.093-.469.417-1.05.417-1.05s52.426-46.6,53.821-51.492c.108-.379-.3-.566-.848-.4-3.482,1.281-63.844,39.4-70.506,43.607A3.21,3.21,0,0,1,81.486,130.178Z' fill='#fff'/></svg>")) " Telegram")
+           (:a :href "/forum"
+            (:span :class "nav-icon" (cl-who:str "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719'/></svg>")) " Форум"))
+          (:div :class "header-right"
+           (if user
+               (cl-who:htm
+                (:a :class "header-user" :href (format nil "/user/~A" (session-username user))
+                 (cl-who:str (session-username user)))
+                (:a :class "header-logout" :href "/logout" "Выйти"))
+               (cl-who:htm
+                (:a :class "header-login" :href "/login" "Войти")
+                 (:a :class "header-register" :href "/register" "Регистрация"))))))
         (:main
          (:section :class "section"
           (:h2 "Что такое Common Lisp")
@@ -156,8 +173,8 @@
            (:li (:a :href "http://www.gigamonkeys.com/book/" "Practical Common Lisp") " — книга для новичков (онлайн)")
            (:li (:a :href "http://www.paulgraham.com/onlisp.html" "On Lisp") " — продвинутые макросы от Пауэлла Грейхема")
            (:li (:a :href "https://common-lisp.net/" "common-lisp.net") " — хостинг open-source проектов")
-             (:li (:a :href "https://www.reddit.com/r/Common_Lisp/" "r/Common_Lisp") " — сообщество на Reddit"))))
-         (:footer
+              (:li (:a :href "https://www.reddit.com/r/Common_Lisp/" "r/Common_Lisp") " — сообщество на Reddit"))))
+          (:footer
           (:p
             (:a :href "https://github.com/turtle-bazon/lisper.ru" "lisper.ru") " &copy; 2026 | GPL-3.0"))
           (:div :id "repl-overlay" :class "repl-overlay"
@@ -166,7 +183,7 @@
              (:span "Common Lisp REPL")
              (:button :class "repl-close" "&times;"))
             (:div :id "repl-console" :class "repl-console")))
-        (:script :src "/js?v=2"))))))
+        (:script :src "/js?v=3"))))))
 
 
 

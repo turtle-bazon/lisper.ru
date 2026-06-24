@@ -8,6 +8,10 @@
                #:cl-who
                #:cl-css
                #:cl-base64
+               #:postmodern
+               #:ironclad
+               #:split-sequence
+               #:flexi-streams
                #:uiop)
   :serial t
   :components ((:module "src"
@@ -15,8 +19,13 @@
                 ((:file "package")
                  (:file "config")
                  (:file "resources")
+                 (:file "migrations")
+                 (:file "db")
+                 (:file "auth")
+                 (:file "forum")
                  (:file "css")
                  (:file "js")
                  (:file "pages")
+                 (:file "forum-pages")
                  (:file "routes")
                  (:file "main")))))
