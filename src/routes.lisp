@@ -9,7 +9,7 @@
         :x-frame-options "DENY"
         :x-xss-protection "0"
         :referrer-policy "strict-origin-when-cross-origin"
-        :content-security-policy "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://jscl-project.github.io; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self'; frame-ancestors 'none'"))
+         :content-security-policy "default-src 'self'; script-src 'self' 'unsafe-eval' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self'; frame-ancestors 'none'"))
 
 (defun add-security-headers (response)
   "Add security headers to a Clack response."
@@ -42,11 +42,37 @@
             ((string= path "/css")
              `(200 (:content-type "text/css; charset=utf-8")
                    (,(generate-css))))
-            ((string= path "/js")
-             `(200 (:content-type "application/javascript; charset=utf-8")
-                   (,(generate-js))))
+             ((string= path "/js")
+              `(200 (:content-type "application/javascript; charset=utf-8")
+                    (,(generate-js))))
+             ((string= path "/jscl.js")
+               `(200 (:content-type "application/javascript; charset=utf-8")
+                     (,*jscl-js*)))
 
-            ;; Auth routes
+             ;; Game source download
+             ((and (>= (length path) 13)
+                   (string= (subseq path 0 13) "/game-source/"))
+              (let* ((name (subseq path 13))
+                     (src (get-game-source name)))
+                (if src
+                    `(200 (:content-type "text/plain; charset=utf-8")
+                          (,(cdr src)))
+                    '(404 (:content-type "text/plain; charset=utf-8")
+                      ("Game not found")))))
+
+             ;; Tool source download
+             ((and (>= (length path) 13)
+                   (string= (subseq path 0 13) "/tool-source/"))
+              (let* ((name (subseq path 13))
+                     (src (get-tool-source name)))
+                (if src
+                    `(200 (:content-type "text/plain; charset=utf-8")
+                          (,(cdr src)))
+                    '(404 (:content-type "text/plain; charset=utf-8")
+                      ("Tool not found")))))
+
+
+             ;; Auth routes
             ((and (string= path "/login") (eq (env-method env) :GET))
              `(200 (:content-type "text/html; charset=utf-8")
                    (,(forum-page-login user nil))))

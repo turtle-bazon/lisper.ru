@@ -1,63 +1,4 @@
-(in-package :lisper)
-
-(defparameter *logo-svg*
-  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>
-<svg
-   version=\"1.1\"
-   viewBox=\"0 0 512 512\"
-   id=\"svg2\"
-   sodipodi:docname=\"logo.svg\"
-   inkscape:version=\"1.4.3 (0d15f75042, 2025-12-25)\"
-   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"
-   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"
-   xmlns=\"http://www.w3.org/2000/svg\"
-   xmlns:svg=\"http://www.w3.org/2000/svg\">
-  <defs
-     id=\"defs2\" />
-  <sodipodi:namedview
-     id=\"namedview2\"
-     pagecolor=\"#ffffff\"
-     bordercolor=\"#666666\"
-     borderopacity=\"1.0\"
-     inkscape:showpageshadow=\"2\"
-     inkscape:pageopacity=\"0.0\"
-     inkscape:pagecheckerboard=\"0\"
-     inkscape:deskcolor=\"#d1d1d1\"
-     inkscape:zoom=\"1.5839844\"
-     inkscape:cx=\"256\"
-     inkscape:cy=\"256\"
-     inkscape:window-width=\"1920\"
-     inkscape:window-height=\"1008\"
-     inkscape:window-x=\"0\"
-     inkscape:window-y=\"36\"
-     inkscape:window-maximized=\"1\"
-     inkscape:current-layer=\"svg2\" />
-  <circle
-     cx=\"256\"
-     cy=\"256\"
-     r=\"235\"
-     fill=\"#fff\"
-     id=\"circle1\"
-     style=\"fill:#1a1a2e;fill-opacity:1\" />
-  <path
-     stroke=\"#000\"
-     stroke-width=\"5\"
-     d=\"m255.56 20.008c-62.374 0.1169-122.17 24.922-166.3 68.992-92.236 92.091-92.353 241.52-0.2617 333.75 92.09 92.236 241.52 92.353 333.75 0.262 92.236-92.091 92.353-241.52 0.262-333.75-44.377-44.447-104.64-69.371-167.45-69.254zm2.281 1.0059c59.934 0.4846 119.39 23.809 164.46 68.953 91.701 91.845 91.585 240.64-0.259 332.34-45.922 45.851-120.32 45.793-166.17-0.129-45.851-45.922-45.793-120.32 0.129-166.17 46.412-46.339 46.471-121.53 0.13-167.94-37.084-37.141-94.457-46.553-140.66-21.658 42.416-31.541 92.711-45.798 142.37-45.396zm-190.84 130.26h40c9.943 42.147 25.204 79.418 40.75 116.43 15.9-41.326 33.203-81.249 55.25-116.43h40c-48.928 97.364-102.19 164.06-24 250h-40c-47.567-77.243-82.439-147.67-112-250z\"
-     id=\"path1\"
-     style=\"stroke:#7d3cec;stroke-opacity:1;fill:#7c3bed;fill-opacity:1;stroke-width:10;stroke-dasharray:none\" />
-  <path
-     d=\"m293 110.72c78.194 85.936 24.928 152.64-24 250h40c22.047-35.179 39.35-75.102 55.25-116.43 15.546 37.01 30.807 74.282 40.75 116.43h40c-29.561-102.33-64.433-172.76-112-250z\"
-     id=\"path2\"
-     style=\"fill:#7c3bed;fill-opacity:1\" />
-</svg>
-")
-
-(defparameter *favicon-data-uri*
-  (concatenate 'string
-               "data:image/svg+xml;base64,"
-               "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjM1IiBmaWxsPSIjZmZmIi8+CiAgPHBhdGggc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjUiIGQ9Im0yNTUuNTYgMjAuMDA4Yy02Mi4zNzQgMC4xMTY5LTEyMi4xNyAyNC45MjItMTY2LjMgNjguOTkyLTkyLjIzNiA5Mi4wOTEtOTIuMzUzIDI0MS41Mi0wLjI2MTcgMzMzLjc1IDkyLjA5IDkyLjIzNiAyNDEuNTIgOTIuMzUzIDMzMy43NSAwLjI2MiA5Mi4yMzYtOTIuMDkxIDkyLjM1My0yNDEuNTIgMC4yNjItMzMzLjc1LTQ0LjM3Ny00NC40NDctMTA0LjY0LTY5LjM3MS0xNjcuNDUtNjkuMjU0em0yLjI4MSAxLjAwNTljNTkuOTM0IDAuNDg0NiAxMTkuMzkgMjMuODA5IDE2NC40NiA2OC45NTMgOTEuNzAxIDkxLjg0NSA5MS41ODUgMjQwLjY0LTAuMjU5IDMzMi4zNC00NS45MjIgNDUuODUxLTEyMC4zMiA0NS43OTMtMTY2LjE3LTAuMTI5LTQ1Ljg1MS00NS45MjItNDUuNzkzLTEyMC4zMiAwLjEyOS0xNjYuMTcgNDYuNDEyLTQ2LjMzOSA0Ni40NzEtMTIxLjUzIDAuMTMtMTY3Ljk0LTM3LjA4NC0zNy4xNDEtOTQuNDU3LTQ2LjU1My0xNDAuNjYtMjEuNjU4IDQyLjQxNi0zMS41NDEgOTIuNzExLTQ1Ljc5OCAxNDIuMzctNDUuMzk2em0tMTkwLjg0IDEzMC4yNmg0MGM5Ljk0MyA0Mi4xNDcgMjUuMjA0IDc5LjQxOCA0MC43NSAxMTYuNDMgMTUuOS00MS4zMjYgMzMuMjAzLTgxLjI0OSA1NS4yNS0xMTYuNDNoNDBjLTQ4LjkyOCA5Ny4zNjQtMTAyLjE5IDE2NC4wNi0yNCAyNTBoLTQwYy00Ny41NjctNzcuMjQzLTgyLjQzOS0xNDcuNjctMTEyLTI1MHoiLz4KICA8cGF0aCBkPSJtMjkzIDExMC43MmM3OC4xOTQgODUuOTM2IDI0LjkyOCAxNTIuNjQtMjQgMjUwaDQwYzIyLjA0Ny0zNS4xNzkgMzkuMzUtNzUuMTAyIDU1LjI1LTExNi40MyAxNS41NDYgMzcuMDEgMzAuODA3IDc0LjI4MiA0MC43NSAxMTYuNDNoNDBjLTI5LjU2MS0xMDIuMzMtNjQuNDMzLTE3Mi43Ni0xMTItMjUweiIvPgo8L3N2Zz4K"))
-(defparameter *jscl-js*
-  "(function(){
+(function(){
 'use strict';
 /* This file, unlike the rest of the project is distributed under a permissive
  * license, as it will be included in the generated code. */
@@ -65,7 +6,7 @@
 /*
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
- * \"Software\"), to deal in the Software without restriction, including
+ * "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish,
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
@@ -74,7 +15,7 @@
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
  * NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
@@ -93,15 +34,15 @@ var errorSym;
 
 var jscl = Object.create(null);
 
-if (typeof module !== \"undefined\") module.exports = jscl;
-else if (typeof self !== \"undefined\") self.jscl = jscl;
+if (typeof module !== "undefined") module.exports = jscl;
+else if (typeof self !== "undefined") self.jscl = jscl;
 
 var internals = (jscl.internals = Object.create(null));
 
 internals.globalEval = function (code, data) {
   var geval = eval; // Just an indirect eval
   var fn = geval(
-    '(function(internals, data){ \"use strict\"; var values = internals.values; ' + code + \"; })\",
+    '(function(internals, data){ "use strict"; var values = internals.values; ' + code + "; })",
   );
   return fn(internals, data);
 };
@@ -144,24 +85,24 @@ internals.error = function (...args) {
 
 internals.typeError = function (datum, expectedType) {
   internals.error(
-    internals.intern(\"TYPE-ERROR\", \"COMMON-LISP\"),
-    internals.intern(\"DATUM\", \"KEYWORD\"),
+    internals.intern("TYPE-ERROR", "COMMON-LISP"),
+    internals.intern("DATUM", "KEYWORD"),
     datum,
-    internals.intern(\"EXPECTED-TYPE\", \"KEYWORD\"),
+    internals.intern("EXPECTED-TYPE", "KEYWORD"),
     expectedType,
   );
 };
 
 // Symbol infrastructure
 
-const UNBOUND = Symbol(\"Unbound\");
+const UNBOUND = Symbol("Unbound");
 internals.UNBOUND = UNBOUND;
 
 internals.makeUnboundFunction = function (symbol) {
   const fn = () => {
     internals.error(
-      internals.intern(\"UNDEFINED-FUNCTION\", \"COMMON-LISP\"),
-      internals.intern(\"NAME\", \"KEYWORD\"),
+      internals.intern("UNDEFINED-FUNCTION", "COMMON-LISP"),
+      internals.intern("NAME", "KEYWORD"),
       symbol,
     );
   };
@@ -171,9 +112,9 @@ internals.makeUnboundFunction = function (symbol) {
 
 internals.makeUnboundSetFunction = function (symbol) {
   const fn = () => {
-    internals.error(internals.intern(\"UNDEFINED-FUNCTION\", \"COMMON-LISP\"),
-      internals.intern(\"NAME\", \"KEYWORD\"),
-      internals.QIList(internals.intern(\"SETF\", \"COMMON-LISP\"), symbol, nil));
+    internals.error(internals.intern("UNDEFINED-FUNCTION", "COMMON-LISP"),
+      internals.intern("NAME", "KEYWORD"),
+      internals.QIList(internals.intern("SETF", "COMMON-LISP"), symbol, nil));
   }
   fn[UNBOUND] = true;
   return fn;
@@ -193,17 +134,17 @@ internals.Symbol = function (name, pkg) {
 // Created as uninterned symbols so they are available early.
 // They are registered into the CL package once it exists.
 
-nil = new internals.Symbol(\"NIL\", null);
-t = new internals.Symbol(\"T\", null);
-errorSym = new internals.Symbol(\"ERROR\", null);
-Object.defineProperty(nil, \"$$jscl_car\", { value: nil, writable: false });
-Object.defineProperty(nil, \"$$jscl_cdr\", { value: nil, writable: false });
+nil = new internals.Symbol("NIL", null);
+t = new internals.Symbol("T", null);
+errorSym = new internals.Symbol("ERROR", null);
+Object.defineProperty(nil, "$$jscl_car", { value: nil, writable: false });
+Object.defineProperty(nil, "$$jscl_cdr", { value: nil, writable: false });
 
 // Early error definition
 
 errorSym.fvalue = function earlyError(...args){
-  console.debug(\"BOOT PANIC! Arguments to ERROR:\", ...args);
-  throw \"BOOT PANIC!\";
+  console.debug("BOOT PANIC! Arguments to ERROR:", ...args);
+  throw "BOOT PANIC!";
 }
 
 //
@@ -353,11 +294,11 @@ internals.Bitwise_and = function (x, y) {
 var values = internals.values;
 
 internals.checkArgsAtLeast = function (args, n) {
-  if (args < n) throw \"too few arguments\";
+  if (args < n) throw "too few arguments";
 };
 
 internals.checkArgsAtMost = function (args, n) {
-  if (args > n) throw \"too many arguments\";
+  if (args > n) throw "too many arguments";
 };
 
 internals.checkArgs = function (args, n) {
@@ -368,32 +309,32 @@ internals.checkArgs = function (args, n) {
 // Lists
 
 internals.Cons = function (car, cdr) {
-  this[\"$$jscl_car\"] = car;
-  this[\"$$jscl_cdr\"] = cdr;
+  this["$$jscl_car"] = car;
+  this["$$jscl_cdr"] = cdr;
 };
 
-Object.defineProperty(Object.prototype, \"$$jscl_car\", {
+Object.defineProperty(Object.prototype, "$$jscl_car", {
   get: function () {
-    internals.typeError(this, internals.intern(\"CONS\", \"COMMON-LISP\"));
+    internals.typeError(this, internals.intern("CONS", "COMMON-LISP"));
   },
   set: function () {
-    internals.typeError(this, internals.intern(\"CONS\", \"COMMON-LISP\"));
+    internals.typeError(this, internals.intern("CONS", "COMMON-LISP"));
   },
 });
 
-Object.defineProperty(Object.prototype, \"$$jscl_cdr\", {
+Object.defineProperty(Object.prototype, "$$jscl_cdr", {
   get: function () {
-    internals.typeError(this, internals.intern(\"CONS\", \"COMMON-LISP\"));
+    internals.typeError(this, internals.intern("CONS", "COMMON-LISP"));
   },
   set: function () {
-    internals.typeError(this, internals.intern(\"CONS\", \"COMMON-LISP\"));
+    internals.typeError(this, internals.intern("CONS", "COMMON-LISP"));
   },
 });
 
-Object.defineProperty(internals.Cons.prototype, \"$$jscl_car\", {
+Object.defineProperty(internals.Cons.prototype, "$$jscl_car", {
   writable: true,
 });
-Object.defineProperty(internals.Cons.prototype, \"$$jscl_cdr\", {
+Object.defineProperty(internals.Cons.prototype, "$$jscl_cdr", {
   writable: true,
 });
 
@@ -415,8 +356,8 @@ internals.QIList = function () {
 internals.handled_division = function (x, y) {
   if (y == 0)
     internals.error(
-      internals.intern(\"DIVISION-BY-ZERO\", \"COMMON-LISP\"),
-      internals.intern(\"OPERANDS\", \"KEYWORD\"),
+      internals.intern("DIVISION-BY-ZERO", "COMMON-LISP"),
+      internals.intern("OPERANDS", "KEYWORD"),
       internals.QIList(x, y, nil),
     );
   return x / y;
@@ -426,7 +367,7 @@ internals.handled_division = function (x, y) {
 
 // Return a new Array of strings, each either length-1, or length-2 (a UTF-16 surrogate pair).
 function codepoints(string) {
-  return string.split(/(?![\\udc00-\\udfff])/);
+  return string.split(/(?![\udc00-\udfff])/);
 }
 
 // Create and return a lisp string for the Javascript string STRING.
@@ -477,11 +418,11 @@ internals.safe_char_downcase = function (x) {
 };
 
 internals.xstring = function (x) {
-  if (typeof x === \"string\") return x;
-  if (typeof x === \"number\") return x.toString();
-  const hasFillPointer = typeof x.fillpointer === \"number\";
+  if (typeof x === "string") return x;
+  if (typeof x === "number") return x.toString();
+  const hasFillPointer = typeof x.fillpointer === "number";
   const activechars = hasFillPointer ? x.slice(0, x.fillpointer) : x;
-  return activechars.join(\"\");
+  return activechars.join("");
 };
 
 // Non-local exits
@@ -516,7 +457,7 @@ internals.isNLX = function (x) {
 var packages = (jscl.packages = Object.create(null));
 
 const jsclPackage = {
-  packageName: \"JSCL-XC\",
+  packageName: "JSCL-XC",
   symbols: Object.create(null),
   exports: Object.create(null),
   nicknames: nil,
@@ -524,10 +465,10 @@ const jsclPackage = {
   use: nil,
 }
 
-packages[\"JSCL-XC\"] = jsclPackage;
+packages["JSCL-XC"] = jsclPackage;
 
 packages.CL = {
-  packageName: \"COMMON-LISP\",
+  packageName: "COMMON-LISP",
   symbols: Object.create(null),
   exports: Object.create(null),
   nicknames: nil,
@@ -535,10 +476,10 @@ packages.CL = {
   use: nil,
 };
 
-packages[\"COMMON-LISP\"] = packages.CL;
+packages["COMMON-LISP"] = packages.CL;
 
 packages.KEYWORD = {
-  packageName: \"KEYWORD\",
+  packageName: "KEYWORD",
   symbols: Object.create(null),
   exports: Object.create(null),
   nicknames: nil,
@@ -550,18 +491,18 @@ jscl.CL = packages.CL.exports;
 
 // Register nil, t, and error into the CL package
 nil.package = packages.CL;
-packages.CL.symbols[\"NIL\"] = nil;
+packages.CL.symbols["NIL"] = nil;
 t.package = packages.CL;
-packages.CL.symbols[\"T\"] = t;
+packages.CL.symbols["T"] = t;
 errorSym.package = packages.CL;
-packages.CL.symbols[\"ERROR\"] = errorSym;
+packages.CL.symbols["ERROR"] = errorSym;
 
 internals.symbolValue = function (symbol) {
   var value = symbol.value;
   if (value === UNBOUND) {
     internals.error(
-      internals.intern(\"UNBOUND-VARIABLE\", \"COMMON-LISP\"),
-      internals.intern(\"NAME\", \"KEYWORD\"),
+      internals.intern("UNBOUND-VARIABLE", "COMMON-LISP"),
+      internals.intern("NAME", "KEYWORD"),
       symbol,
     );
   } else {
@@ -608,7 +549,7 @@ internals.bindSpecialBindings = function (symbols, vals, callback){
 
 internals.intern = function (name, package_name) {
   var lisp_package = package_name ? packages[package_name]: jsclPackage;
-  if (!lisp_package) throw \"No package \" + package_name;
+  if (!lisp_package) throw "No package " + package_name;
 
   var symbol = lisp_package.symbols[name];
   if (!symbol)
@@ -629,11 +570,11 @@ jscl.evaluateString = function (str) {
 
 /* execute all script tags with type of x-common-lisp */
 var eval_in_lisp; // set in FFI.lisp
-const commonLispScriptType = \"text/x-common-lisp\";
+const commonLispScriptType = "text/x-common-lisp";
 
-if (typeof window !== \"undefined\" && window && window.addEventListener) {
+if (typeof window !== "undefined" && window && window.addEventListener) {
   window.addEventListener(
-    \"DOMContentLoaded\",
+    "DOMContentLoaded",
     function () {
       return runCommonLispScripts();
     },
@@ -642,7 +583,7 @@ if (typeof window !== \"undefined\" && window && window.addEventListener) {
 }
 
 function runCommonLispScripts() {
-  var documentScripts = document.getElementsByTagName(\"script\");
+  var documentScripts = document.getElementsByTagName("script");
   var scripts = [];
   var script;
 
@@ -653,7 +594,7 @@ function runCommonLispScripts() {
       script = scripts[i];
       if (script.loaded && !script.executed) {
         script.executed = true;
-        eval_in_lisp(\"(progn \" + script.text + \")\");
+        eval_in_lisp("(progn " + script.text + ")");
       } else if (!script.loaded && !script.error) {
         break;
       }
@@ -662,9 +603,9 @@ function runCommonLispScripts() {
 
   var loadRemoteDocument = function (url, successCallback, errorCallback) {
     var xhr = new XMLHttpRequest();
-    xhr.open(\"GET\", url, true);
-    if (\"overrideMimeType\" in xhr) {
-      xhr.overrideMimeType(\"text/plain\");
+    xhr.open("GET", url, true);
+    if ("overrideMimeType" in xhr) {
+      xhr.overrideMimeType("text/plain");
     }
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
@@ -672,7 +613,7 @@ function runCommonLispScripts() {
           successCallback(xhr.responseText);
         } else {
           errorCallback();
-          throw new Error(\"Could not load \" + url);
+          throw new Error("Could not load " + url);
         }
       }
     };
@@ -684,7 +625,7 @@ function runCommonLispScripts() {
       continue;
     }
 
-    if (\"src\" in documentScripts[i] && documentScripts[i].src.length != 0) {
+    if ("src" in documentScripts[i] && documentScripts[i].src.length != 0) {
       script = {
         executed: false,
         error: false,
@@ -720,12 +661,12 @@ function runCommonLispScripts() {
 
 // Node/Deno REPL and filesystem access
 if (
-  typeof module !== \"undefined\" &&
-  typeof global !== \"undefined\" &&
-  typeof phantom === \"undefined\"
+  typeof module !== "undefined" &&
+  typeof global !== "undefined" &&
+  typeof phantom === "undefined"
 ) {
-  global.readline = require(\"readline\");
-  global.repl = require(\"repl\");
+  global.readline = require("readline");
+  global.repl = require("repl");
 }
 var l1=internals.make_lisp_string('loading boot.lisp!');
 console.log(internals.xstring(l1));
@@ -1037,7 +978,7 @@ l31;
 var l33=internals.intern('FBOUNDP','COMMON-LISP');
 var l34=internals.intern('SETF','COMMON-LISP');
 var l35=internals.intern('CADR','COMMON-LISP');
-var l36=internals.make_lisp_string(\"Invalid function `~S'.\");
+var l36=internals.make_lisp_string("Invalid function `~S'.");
 var l37=internals.intern('ERROR','COMMON-LISP');
 l33.fvalue=(function(){var FUNC=(function JSCL_USER_FBOUNDP(v75){internals.checkArgs(arguments.length,1);
 var v76=this;
@@ -1049,7 +990,7 @@ return FUNC;
 })();
 l33;
 var l38=internals.intern('FDEFINITION','COMMON-LISP');
-var l39=internals.make_lisp_string(\"Invalid function `~S'.\");
+var l39=internals.make_lisp_string("Invalid function `~S'.");
 l38.fvalue=(function(){var FUNC=(function JSCL_USER_FDEFINITION(v78){internals.checkArgs(arguments.length,1);
 var v79=this;
 return (function(){return (v78 instanceof internals.Symbol?l2.value:l3.value)!==l3.value?internals.symbolFunction(v78):((v78 instanceof internals.Cons?l2.value:l3.value)!==l3.value?v78.$$jscl_car===l34?l2.value:l3.value:l3.value)!==l3.value?internals.symbolSetFunction(l35.fvalue(v78)):internals.mvcall(l37.fvalue,l39,v78);
@@ -1399,7 +1340,7 @@ return FUNC;
 })();
 l136;
 var l147=internals.intern('COERCE','COMMON-LISP');
-var l148=internals.make_lisp_string(\"Can't coerce ~a to ~a\");
+var l148=internals.make_lisp_string("Can't coerce ~a to ~a");
 var l149=internals.intern('TYPEP','COMMON-LISP');
 var l150=internals.intern('VECTOR-TO-LIST');
 var l151=internals.intern('LAMBDA','COMMON-LISP');
@@ -1960,7 +1901,7 @@ return FUNC;
 l210;
 var l214=internals.intern('FIND-PACKAGE-OR-FAIL');
 var l215=internals.intern('FIND-PACKAGE','COMMON-LISP');
-var l216=internals.make_lisp_string(\"The name `~S' does not designate any package.\");
+var l216=internals.make_lisp_string("The name `~S' does not designate any package.");
 l214.fvalue=(function(){var FUNC=(function JSCL_USER_FINDPACKAGEORFAIL(v338){internals.checkArgs(arguments.length,1);
 var v339=this;
 return (function(){return (function(v341){return v341!==l3.value?internals.values1(v341):internals.mvcall(l210.fvalue,v338,l216,v338);
@@ -2532,7 +2473,7 @@ return internals.mvcall(l8.fvalue,internals.make_lisp_string(v530.name),l7.fvalu
 })();
 });
 FUNC.fname=internals.make_lisp_string('DEF!STRUCT-PROPERTY-NAMES');
-FUNC.docstring=internals.make_lisp_string('Compute the list of JS property names to use for SLOTS.\\nAppend numbers to symbol names to make them unique.');
+FUNC.docstring=internals.make_lisp_string('Compute the list of JS property names to use for SLOTS.\nAppend numbers to symbol names to make them unique.');
 return FUNC;
 })();
 l268;
@@ -3273,8 +3214,8 @@ var l395=internals.intern('FIRST','COMMON-LISP');
 var l396=internals.intern('SECOND','COMMON-LISP');
 var l397=internals.intern('THIRD','COMMON-LISP');
 var l398=internals.intern('CDDDR','COMMON-LISP');
-var l399=internals.make_lisp_string(\"Bad optional parameter specification `~S'\");
-var l400=internals.make_lisp_string(\"`~S' is not a valid supplied optional parameter.\");
+var l399=internals.make_lisp_string("Bad optional parameter specification `~S'");
+var l400=internals.make_lisp_string("`~S' is not a valid supplied optional parameter.");
 l394.fvalue=(function(){var FUNC=(function JSCL_USER_PARSEOPTVAR(v742){internals.checkArgs(arguments.length,1);
 var v743=this;
 return (function(){return (function(v745){return (v745 instanceof internals.Symbol?l2.value:l3.value)!==l3.value?internals.mvcall(l313.fvalue,l314.value,v742):(v745 instanceof internals.Cons?l2.value:l3.value)!==l3.value?(function(v746,v747,v748){if (l120.fvalue(l398.fvalue(v742))!==l3.value) l3.value;
@@ -3292,11 +3233,11 @@ return FUNC;
 l394;
 var l401=internals.intern('PARSE-KEYVAR');
 var l402=internals.make_lisp_string('KEYWORD');
-var l403=internals.make_lisp_string(\"Bad keyword parameter specification `~S'\");
-var l404=internals.make_lisp_string(\"`~S' is not a valid supplied optional parameter.\");
+var l403=internals.make_lisp_string("Bad keyword parameter specification `~S'");
+var l404=internals.make_lisp_string("`~S' is not a valid supplied optional parameter.");
 var l405=internals.make_lisp_string('KEYWORD');
 var l406=internals.intern('CDDR','COMMON-LISP');
-var l407=internals.make_lisp_string(\"Bad keyword argument name description `~S'\");
+var l407=internals.make_lisp_string("Bad keyword argument name description `~S'");
 var l408=internals.make_lisp_string('~S is not a valid keyword-name.');
 l401.fvalue=(function(){var FUNC=(function JSCL_USER_PARSEKEYVAR(v749){internals.checkArgs(arguments.length,1);
 var v750=this;
@@ -3319,7 +3260,7 @@ return FUNC;
 })();
 l401;
 var l409=internals.intern('PARSE-AUXVAR');
-var l410=internals.make_lisp_string(\"Bad aux variable specification `~S'\");
+var l410=internals.make_lisp_string("Bad aux variable specification `~S'");
 l409.fvalue=(function(){var FUNC=(function JSCL_USER_PARSEAUXVAR(v759){internals.checkArgs(arguments.length,1);
 var v760=this;
 return (function(){return (function(v762){return (v762 instanceof internals.Symbol?l2.value:l3.value)!==l3.value?internals.mvcall(l347.fvalue,l314.value,v759):(v762 instanceof internals.Cons?l2.value:l3.value)!==l3.value?(function(v763,v764){if (l120.fvalue(l398.fvalue(v759))!==l3.value) l3.value;
@@ -3680,7 +3621,7 @@ return FUNC;
 })();
 l416;
 var l417=internals.intern('NTHCDR','COMMON-LISP');
-var l418=internals.make_lisp_string(\"Too few list elements in `~S'. Expected at least ~a elements.\");
+var l418=internals.make_lisp_string("Too few list elements in `~S'. Expected at least ~a elements.");
 l177.fvalue=(function(){var FUNC=(function JSCL_USER_VALIDATEREQVARS(v896,v897){internals.checkArgs(arguments.length,2);
 var v898=this;
 return (function(){if (l106.fvalue(v896)!==l3.value) l3.value;
@@ -3696,7 +3637,7 @@ return FUNC;
 })();
 l177;
 var l419=internals.intern('VALIDATE-MAX-ARGS');
-var l420=internals.make_lisp_string(\"Too many elements `~S' in the lambda-list\");
+var l420=internals.make_lisp_string("Too many elements `~S' in the lambda-list");
 l419.fvalue=(function(){var FUNC=(function JSCL_USER_VALIDATEMAXARGS(v901){internals.checkArgs(arguments.length,1);
 var v902=this;
 return (function(){if (l120.fvalue(v901)!==l3.value) l3.value;
@@ -3709,8 +3650,8 @@ return FUNC;
 })();
 l419;
 var l421=internals.intern('VALIDATE-KEYVARS');
-var l422=internals.make_lisp_string(\"Unknown keyword argument `~S'.\");
-var l423=internals.make_lisp_string(\"Keyword argument `~S' is not a symbol.\");
+var l422=internals.make_lisp_string("Unknown keyword argument `~S'.");
+var l423=internals.make_lisp_string("Keyword argument `~S' is not a symbol.");
 var l424=internals.make_lisp_string('Odd number of keyword arguments.');
 l421.fvalue=(function(){var FUNC=(function JSCL_USER_VALIDATEKEYVARS(v904,v905,v906){internals.checkArgsAtLeast(arguments.length,2);
 internals.checkArgsAtMost(arguments.length,3);
@@ -6428,7 +6369,7 @@ return 55+x1;
 })();
 });
 FUNC.fname=internals.make_lisp_string('DIGIT-CHAR');
-FUNC.docstring=internals.make_lisp_string('All arguments must be integers. Returns a character object that represents\\na digit of the given weight in the specified radix. Returns NIL if no such\\ncharacter exists.');
+FUNC.docstring=internals.make_lisp_string('All arguments must be integers. Returns a character object that represents\na digit of the given weight in the specified radix. Returns NIL if no such\ncharacter exists.');
 return FUNC;
 })();
 l28;
@@ -6717,7 +6658,7 @@ var l975=(function(){var v1555=[l976,l977,l978,l979,l980,l981,l982,l983,l984,l98
 return v1555;
 })();
 l974.value=l975;
-var l1104=internals.make_lisp_string(\"Names/codepoints of the first 128 characters from Unicode 6.2,\\nexcept with Common Lisp's suggested changes.\\nFor the first 32 characters ('C0 controls'), the first\\n'Commonly used alternative alias' is used -- note that this differs from SBCL, which uses abbreviations.\");
+var l1104=internals.make_lisp_string("Names/codepoints of the first 128 characters from Unicode 6.2,\nexcept with Common Lisp's suggested changes.\nFor the first 32 characters ('C0 controls'), the first\n'Commonly used alternative alias' is used -- note that this differs from SBCL, which uses abbreviations.");
 l974['vardoc']=l1104;
 l974;
 var l1105=internals.intern('CHAR-NAME','COMMON-LISP');
@@ -6806,14 +6747,14 @@ FUNC.fname=internals.make_lisp_string('NULL');
 return FUNC;
 })();
 l120;
-var l1109=internals.make_lisp_string(\"The value `~S' is not a type list.\");
+var l1109=internals.make_lisp_string("The value `~S' is not a type list.");
 l475.fvalue=(function(){var FUNC=(function JSCL_USER_ENDP(v1581){internals.checkArgs(arguments.length,1);
 var v1582=this;
 return (function(){return l120.fvalue(v1581)!==l3.value?internals.values1(l2.value):(v1581 instanceof internals.Cons?l2.value:l3.value)!==l3.value?internals.values1(l3.value):internals.mvcall(l37.fvalue,l1109,v1581);
 })();
 });
 FUNC.fname=internals.make_lisp_string('ENDP');
-FUNC.docstring=internals.make_lisp_string('It returns true if OBJECT is NIL, false if OBJECT is a CONS, and an error\\n   for any other type of OBJECT.\\n\\n   This is the recommended way to test for the end of a proper list.');
+FUNC.docstring=internals.make_lisp_string('It returns true if OBJECT is NIL, false if OBJECT is a CONS, and an error\n   for any other type of OBJECT.\n\n   This is the recommended way to test for the end of a proper list.');
 return FUNC;
 })();
 l475;
@@ -9095,7 +9036,7 @@ return (function(){return internals.mvcall(l1181.fvalue,v2561,new internals.Cons
 })();
 });
 FUNC.fname=internals.make_lisp_string('MAPCAR');
-FUNC.docstring=internals.make_lisp_string('Apply FUNCTION to successive elements of LIST. Return list of FUNCTION\\n   return values.');
+FUNC.docstring=internals.make_lisp_string('Apply FUNCTION to successive elements of LIST. Return list of FUNCTION\n   return values.');
 return FUNC;
 })();
 l165;
@@ -9108,7 +9049,7 @@ return (function(){return internals.mvcall(l1181.fvalue,v2566,new internals.Cons
 })();
 });
 FUNC.fname=internals.make_lisp_string('MAPCAN');
-FUNC.docstring=internals.make_lisp_string('Apply FUNCTION to successive elements of LIST. Return NCONC of FUNCTION\\n   results.');
+FUNC.docstring=internals.make_lisp_string('Apply FUNCTION to successive elements of LIST. Return NCONC of FUNCTION\n   results.');
 return FUNC;
 })();
 l193;
@@ -9430,7 +9371,7 @@ return internals.values1(v2662);
 })();
 });
 FUNC.fname=internals.make_lisp_string('%FILL-ARRAY-CONTENTS');
-FUNC.docstring=internals.make_lisp_string(\"Fill content of array from nested sequences like :INITIAL-CONTENT.\\n\\nSignal error if CONTENTS structure does not match ARRAY's dimension,\\nin which case ARRAY might be partially filled from CONTENTS.\");
+FUNC.docstring=internals.make_lisp_string("Fill content of array from nested sequences like :INITIAL-CONTENT.\n\nSignal error if CONTENTS structure does not match ARRAY's dimension,\nin which case ARRAY might be partially filled from CONTENTS.");
 return FUNC;
 })();
 l1197;
@@ -18298,7 +18239,7 @@ return FUNC;
 })();
 l1356;
 var l1359=internals.intern('SYMBOL-PLIST','COMMON-LISP');
-var l1360=internals.make_lisp_string(\"`~a' is not a symbol.\");
+var l1360=internals.make_lisp_string("`~a' is not a symbol.");
 l1359.fvalue=(function(){var FUNC=(function JSCL_USER_SYMBOLPLIST(v5191){internals.checkArgs(arguments.length,1);
 var v5192=this;
 return (function(){return l13.fvalue(v5191 instanceof internals.Symbol?l2.value:l3.value)!==l3.value?internals.mvcall(l37.fvalue,l1360,v5191):('plist' in v5191?l2.value:l3.value)!==l3.value?v5191['plist']:internals.values1(l3.value);
@@ -18308,8 +18249,8 @@ FUNC.fname=internals.make_lisp_string('SYMBOL-PLIST');
 return FUNC;
 })();
 l1359;
-var l1361=internals.make_lisp_string(\"`~a' is not a symbol.\");
-var l1362=internals.make_lisp_string(\"`~a' is not a list.\");
+var l1361=internals.make_lisp_string("`~a' is not a symbol.");
+var l1362=internals.make_lisp_string("`~a' is not a list.");
 l1359.setfvalue=(function(){var FUNC=(function JSCL_USER_SETFSYMBOLPLIST(v5194,v5195){internals.checkArgs(arguments.length,2);
 var v5196=this;
 return (function(){if ((v5195 instanceof internals.Symbol?l2.value:l3.value)!==l3.value) l3.value;
@@ -18412,7 +18353,7 @@ return l161.value=v5249;
 })();
 l1367;
 var l1369=internals.intern('COPY-SYMBOL','COMMON-LISP');
-var l1370=internals.make_lisp_string(\"`~a' is not a symbol.\");
+var l1370=internals.make_lisp_string("`~a' is not a symbol.");
 l1369.fvalue=(function(){var FUNC=(function JSCL_USER_COPYSYMBOL(v5250,v5251){internals.checkArgsAtLeast(arguments.length,1);
 internals.checkArgsAtMost(arguments.length,2);
 switch(arguments.length){case 1:v5251=l3.value;
@@ -18610,7 +18551,7 @@ FUNC.fname=internals.make_lisp_string('RESOLVE-PACKAGE-LIST');
 return FUNC;
 })();
 l1382;
-var l1383=internals.make_lisp_string(\"A package named `~a' already exists.\");
+var l1383=internals.make_lisp_string("A package named `~a' already exists.");
 var l1384=internals.make_lisp_string('packageName');
 var l1385=internals.make_lisp_string('nicknames');
 l221.fvalue=(function(){var FUNC=(function JSCL_USER_RENAMEPACKAGE(v5312,v5313,v5314){internals.checkArgsAtLeast(arguments.length,2);
@@ -18722,7 +18663,7 @@ return FUNC;
 l221;
 var l1386=internals.intern('USE','KEYWORD');
 l1386.value=l1386;
-var l1387=internals.make_lisp_string(\"A package named `~a' already exists.\");
+var l1387=internals.make_lisp_string("A package named `~a' already exists.");
 var l1388=internals.make_lisp_string('packageName');
 var l1389=internals.make_lisp_string('symbols');
 var l1390=internals.make_lisp_string('exports');
@@ -22120,7 +22061,7 @@ l1701;
 var l1702=internals.intern('*LOOP-DESTRUCTURING-HOOKS*','JSCL-XC/LOOP');
 if ((l1702.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l1702.value=l3.value;
-var l1703=internals.make_lisp_string('If not NIL, this must be a list of two things:\\na LET-like macro, and a SETQ-like macro, which perform LOOP-style destructuring.');
+var l1703=internals.make_lisp_string('If not NIL, this must be a list of two things:\na LET-like macro, and a SETQ-like macro, which perform LOOP-style destructuring.');
 l1702['vardoc']=l1703;
 l1702;
 var l1704=internals.intern('LOOP-MAKE-PSETQ','JSCL-XC/LOOP');
@@ -22839,7 +22780,7 @@ return FUNC;
 })();
 l1835;
 var l1836=internals.intern('LOOP-EMIT-FINAL-VALUE','JSCL-XC/LOOP');
-var l1837=internals.make_lisp_string('LOOP clause is providing a value for the iteration,~@\\n	        however one was already established by a ~S clause.');
+var l1837=internals.make_lisp_string('LOOP clause is providing a value for the iteration,~@\n	        however one was already established by a ~S clause.');
 l1836.fvalue=(function(){var FUNC=(function JSCL_USER_LOOPEMITFINALVALUE(v6625){internals.checkArgs(arguments.length,1);
 var v6626=this;
 return (function(){(function(){var v6629=l1833.fvalue(v6625);
@@ -22887,7 +22828,7 @@ var l1844=internals.intern('OF-TYPE','JSCL-XC/LOOP');
 var l1845=internals.make_lisp_string('~S found where a LOOP keyword, LOOP type keyword, or LOOP type pattern expected.');
 var l1846=internals.make_lisp_string('~S found where a LOOP keyword or LOOP type keyword expected.');
 var l1847=internals.make_lisp_string('Destructuring type pattern ~S contains unrecognized type keyword ~S.');
-var l1848=internals.make_lisp_string(\"Destructuring type pattern ~S doesn't match variable pattern ~S.\");
+var l1848=internals.make_lisp_string("Destructuring type pattern ~S doesn't match variable pattern ~S.");
 l1843.fvalue=(function(){var FUNC=(function JSCL_USER_LOOPOPTIONALTYPE(v6638){internals.checkArgsAtMost(arguments.length,1);
 switch(arguments.length){case 0:v6638=l3.value;
 ;
@@ -23357,8 +23298,8 @@ l1879;
 var l1904=internals.intern('LOOP-GET-COLLECTION-INFO','JSCL-XC/LOOP');
 var l1905=internals.intern('INTO','JSCL-XC/LOOP');
 var l1906=internals.make_lisp_string('Value accumulation recipient name, ~S, is not a symbol.');
-var l1907=internals.make_lisp_string('Incompatible kinds of LOOP value accumulation specified for collecting~@\\n		    ~:[as the value of the LOOP~;~:*INTO ~S~]: ~S and ~S.');
-var l1908=internals.make_lisp_string('Unequal datatypes specified in different LOOP value accumulations~@\\n		   into ~S: ~S and ~S.');
+var l1907=internals.make_lisp_string('Incompatible kinds of LOOP value accumulation specified for collecting~@\n		    ~:[as the value of the LOOP~;~:*INTO ~S~]: ~S and ~S.');
+var l1908=internals.make_lisp_string('Unequal datatypes specified in different LOOP value accumulations~@\n		   into ~S: ~S and ~S.');
 l1904.fvalue=(function(){var FUNC=(function JSCL_USER_LOOPGETCOLLECTIONINFO(v6803,v6804,v6805){internals.checkArgs(arguments.length,3);
 var v6806=this;
 return (function(){return (function(v6808,v6809,v6810){if (l13.fvalue(v6810 instanceof internals.Symbol?l2.value:l3.value)!==l3.value) l1812.fvalue(l1906,v6810);
@@ -23414,7 +23355,7 @@ var l1911=internals.intern('LOOP-LIST-TAIL-','JSCL-XC/LOOP');
 var l1912=internals.intern('WITH-LOOP-LIST-COLLECTION-HEAD','JSCL-XC/LOOP');
 var l1913=internals.intern('LOOP-COLLECT-ANSWER','JSCL-XC/LOOP');
 var l1914=internals.intern('LOOP-COPYLIST*','JSCL-XC/LOOP');
-var l1915=internals.make_lisp_string(\"ECASE expression failed for the object `~S'.\");
+var l1915=internals.make_lisp_string("ECASE expression failed for the object `~S'.");
 var l1916=internals.intern('LOOP-COLLECT-RPLACD','JSCL-XC/LOOP');
 l1909.fvalue=(function(){var FUNC=(function JSCL_USER_LOOPLISTCOLLECTION(v6825){internals.checkArgs(arguments.length,1);
 var v6826=this;
@@ -24279,7 +24220,7 @@ l1997.value=l1997;
 var l1998=internals.make_lisp_string('Unrecognizable LOOP iteration path syntax.  Missing EACH or THE?');
 var l1999=internals.make_lisp_string('~S found where a LOOP iteration path name was expected.');
 var l2000=internals.make_lisp_string('~S is not the name of a LOOP iteration path.');
-var l2001=internals.make_lisp_string('\"Inclusive\" iteration is not possible with the ~S LOOP iteration path.');
+var l2001=internals.make_lisp_string('"Inclusive" iteration is not possible with the ~S LOOP iteration path.');
 var l2002=internals.intern('LOOP-COLLECT-PREPOSITIONAL-PHRASES','JSCL-XC/LOOP');
 var l2003=internals.intern('INCLUSIVE','KEYWORD');
 l2003.value=l2003;
@@ -24355,7 +24296,7 @@ var l2008=internals.make_lisp_string('A ~S prepositional phrase occurs multiply 
 var l2009=internals.make_lisp_string('Preposition ~S used when some other preposition has subsumed it.');
 var l2010=internals.intern('USING','JSCL-XC/LOOP');
 var l2011=internals.make_lisp_string('~S bad variable pair in path USING phrase.');
-var l2012=internals.make_lisp_string('The variable substitution for ~S occurs twice in a USING phrase,~@\\n		        with ~S and ~S.');
+var l2012=internals.make_lisp_string('The variable substitution for ~S occurs twice in a USING phrase,~@\n		        with ~S and ~S.');
 l2002.fvalue=(function(){var FUNC=(function JSCL_USER_LOOPCOLLECTPREPOSITIONALPHRASES(v7105,v7106,v7107){internals.checkArgsAtLeast(arguments.length,1);
 internals.checkArgsAtMost(arguments.length,3);
 switch(arguments.length){case 1:v7106=l3.value;
@@ -24472,12 +24413,12 @@ var l2024=internals.intern('BELOW','KEYWORD');
 l2024.value=l2024;
 var l2025=internals.intern('LOOP-LIMIT-','JSCL-XC/LOOP');
 var l2026=internals.intern('LOOP-STEP-BY-','JSCL-XC/LOOP');
-var l2027=internals.make_lisp_string('~S invalid preposition in sequencing or sequence path.~@\\n	       Invalid prepositions specified in iteration path descriptor or something?');
+var l2027=internals.make_lisp_string('~S invalid preposition in sequencing or sequence path.~@\n	       Invalid prepositions specified in iteration path descriptor or something?');
 var l2028=internals.make_lisp_string('Conflicting stepping directions in LOOP sequencing path');
 var l2029=internals.make_lisp_string('Missing OF or IN phrase in sequence path');
 var l2030=internals.QIList(l3,l2019,l3);
 var l2031=internals.intern('LOOP-SEQ-LIMIT-','JSCL-XC/LOOP');
-var l2032=internals.make_lisp_string(\"Don't know where to start stepping.\");
+var l2032=internals.make_lisp_string("Don't know where to start stepping.");
 l2013.fvalue=(function(){var FUNC=(function JSCL_USER_LOOPSEQUENCER(v7144,v7145,v7146,v7147,v7148,v7149,v7150,v7151,v7152,v7153){internals.checkArgs(arguments.length,10);
 var v7154=this;
 return (function(){return (function(v7157,v7158,v7159,v7160,v7161,v7162,v7163,v7164,v7165,v7166,v7167,v7168,v7169,v7170,v7171){if (v7147!==l3.value) l1856.fvalue(v7147,l3.value,v7148);
@@ -25358,7 +25299,7 @@ var v7381=(function(){var v7383=l2284.fvalue(l1201.value,l77);
 (function(){try{var v7384=[];
 return (function(){var v7385=1;
 var v7386=[];
-TBLOOP:while (true){try{switch(v7385){case 1:(function(v7387){return (function(v7388){return l12.fvalue(v7388,'\\n')!==l3.value?(l3.value,(function(){throw new internals.BlockNLX(v7384,l3.value,null,'NIL');
+TBLOOP:while (true){try{switch(v7385){case 1:(function(v7387){return (function(v7388){return l12.fvalue(v7388,'\n')!==l3.value?(l3.value,(function(){throw new internals.BlockNLX(v7384,l3.value,null,'NIL');
 })()):l12.fvalue(v7388,l3)!==l3.value?(l3.value,v7380=l2.value,(function(){throw new internals.BlockNLX(v7384,l3.value,null,'NIL');
 })()):(l3.value,l2285.fvalue(v7387,v7383));
 })(v7387);
@@ -25486,7 +25427,7 @@ if (_R.mv!==null) ARGS=ARGS.concat(_R.mv);
 return internals.mvcall(FUNC,...ARGS);
 })();
 })();
-if (l12.fvalue(v7409,'\\n')!==l3.value) (function(){var v7419=v7410;
+if (l12.fvalue(v7409,'\n')!==l3.value) (function(){var v7419=v7410;
 return (function(){var FUNC=(function JSCL_USER_NIL(v7421){switch(arguments.length){case 0:v7421=l3.value;
 ;
 default:break;
@@ -25523,7 +25464,7 @@ switch(arguments.length){case 1:v7424=internals.symbolValue(l2238);
 ;
 default:break;
 }var v7425=this;
-return (function(){if (l12.fvalue(l30.fvalue(v7423,l266.fvalue(l142.fvalue(v7423))),'\\n')!==l3.value) (function(){var v7428=v7424;
+return (function(){if (l12.fvalue(l30.fvalue(v7423,l266.fvalue(l142.fvalue(v7423))),'\n')!==l3.value) (function(){var v7428=v7424;
 return (function(){var FUNC=(function JSCL_USER_NIL(v7430){switch(arguments.length){case 0:v7430=l3.value;
 ;
 default:break;
@@ -25651,7 +25592,7 @@ while (TAIL!=l3.value){ARGS.push(TAIL.$$jscl_car);
 TAIL=TAIL.$$jscl_cdr;
 }return (typeof F==='function'?F:F.fvalue).apply(this,ARGS);
 })();
-l2285.fvalue('\\n',v7456);
+l2285.fvalue('\n',v7456);
 return internals.values1(v7455);
 })();
 });
@@ -25847,7 +25788,7 @@ var v7515=this;
 return (function(){return (function(v7517){return (function(v7520){return internals.mvcall(l2251.fvalue,l2252.value,(function JSCL_USER_NIL(v7521){internals.checkArgs(arguments.length,1);
 var v7522=this;
 l2291.fvalue(v7521,v7517);
-return l411.fvalue('\\n',v7521)!==l3.value?internals.mvcall(v7520):internals.values1(l3.value);
+return l411.fvalue('\n',v7521)!==l3.value?internals.mvcall(v7520):internals.values1(l3.value);
 }),l2255.value,v7520,l2256.value,l2311);
 })((function JSCL_USER_NIL(){internals.checkArgsAtMost(arguments.length,0);
 var v7518=this;
@@ -25867,10 +25808,10 @@ l2310;
 var l2312=internals.make_lisp_string('loading print.lisp!');
 console.log(internals.xstring(l2312));
 var l2313=internals.intern('LISP-ESCAPE-STRING');
-var l2314=internals.make_lisp_string('\\\\');
-var l2315=internals.make_lisp_string('\\\\');
-var l2316=internals.make_lisp_string('\"');
-var l2317=internals.make_lisp_string('\"');
+var l2314=internals.make_lisp_string('\\');
+var l2315=internals.make_lisp_string('\\');
+var l2316=internals.make_lisp_string('"');
+var l2317=internals.make_lisp_string('"');
 l2313.fvalue=(function(){var FUNC=(function JSCL_USER_LISPESCAPESTRING(v7523){internals.checkArgs(arguments.length,1);
 var v7524=this;
 return (function(){return (function(v7526,v7527,v7528){(function(){return (function(){while ((function(){var x1=v7527;
@@ -25878,10 +25819,10 @@ if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v7528;
 if (typeof x2!='number') internals.typeError(x2,l9);
 return x1<x2?l2.value:l3.value;
-})()!==l3.value){(function(v7530){if ((function(v7531){return v7531!==l3.value?v7531:l23.fvalue(v7530,'\\\\');
-})(l23.fvalue(v7530,'\"'))!==l3.value) v7526=l8.fvalue(v7526,l2314);
+})()!==l3.value){(function(v7530){if ((function(v7531){return v7531!==l3.value?v7531:l23.fvalue(v7530,'\\');
+})(l23.fvalue(v7530,'"'))!==l3.value) v7526=l8.fvalue(v7526,l2314);
  else l3.value;
-if (l23.fvalue(v7530,'\\n')!==l3.value) {v7526=l8.fvalue(v7526,l2315);
+if (l23.fvalue(v7530,'\n')!==l3.value) {v7526=l8.fvalue(v7526,l2315);
 v7530='n';
 } else l3.value;
 return v7526=l8.fvalue(v7526,l117.fvalue(v7530));
@@ -25936,7 +25877,7 @@ return internals.mvcall(FUNC,...ARGS);
 })();
 return (function(v7547){return v7547!==l3.value?v7547:(function(v7548){return v7548!==l3.value?v7548:(function(v7549){return v7549!==l3.value?v7549:(function(v7550){return v7550!==l3.value?v7550:l23.fvalue(v7542,'|');
 })(l13.fvalue(l23.fvalue(v7542,internals.safe_char_upcase(v7542))));
-})(l23.fvalue(v7542,'\\\\'));
+})(l23.fvalue(v7542,'\\'));
 })(l23.fvalue(v7542,':'));
 })(l2319.fvalue(v7542))!==l3.value?(function(){var _R=internals.withMV((function(){return internals.values1(l2.value);
 }));
@@ -26020,7 +25961,7 @@ return FUNC;
 l2324;
 var l2325=internals.intern('ESCAPE-TOKEN');
 var l2326=internals.make_lisp_string('|');
-var l2327=internals.make_lisp_string('\\\\');
+var l2327=internals.make_lisp_string('\\');
 var l2328=internals.make_lisp_string('|');
 l2325.fvalue=(function(){var FUNC=(function JSCL_USER_ESCAPETOKEN(v7566){internals.checkArgs(arguments.length,1);
 var v7567=this;
@@ -26029,7 +25970,7 @@ if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v7572;
 if (typeof x2!='number') internals.typeError(x2,l9);
 return x1<x2?l2.value:l3.value;
-})()!==l3.value){(function(v7573){if ((function(v7574){return v7574!==l3.value?v7574:l23.fvalue(v7573,'\\\\');
+})()!==l3.value){(function(v7573){if ((function(v7574){return v7574!==l3.value?v7574:l23.fvalue(v7573,'\\');
 })(l23.fvalue(v7573,'|'))!==l3.value) (function(){return (function(){var FUNC=(function JSCL_USER_NIL(v7577){switch(arguments.length){case 0:v7577=l3.value;
 ;
 default:break;
@@ -26112,7 +26053,7 @@ return internals.mvcall(FUNC,...ARGS);
 })();
 });
 FUNC.fname=internals.make_lisp_string('WRITE-SYMBOL-FULLY-QUALIFIED');
-FUNC.docstring=internals.make_lisp_string('Write SYMBOL to STREAM with full package qualification.\\nAlways includes package prefix regardless of *package*.');
+FUNC.docstring=internals.make_lisp_string('Write SYMBOL to STREAM with full package qualification.\nAlways includes package prefix regardless of *package*.');
 return FUNC;
 })();
 l2329;
@@ -26282,7 +26223,7 @@ if ((l2350.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l2350.value=l2.value;
 l2350;
 var l2351=internals.intern('SIMPLE-FORMAT');
-var l2352=internals.make_lisp_string(\"`~~' appears in the last position of the format control string ~S.\");
+var l2352=internals.make_lisp_string("`~~' appears in the last position of the format control string ~S.");
 l2351.fvalue=(function(){var FUNC=(function JSCL_USER_SIMPLEFORMAT(v7642,v7643){internals.checkArgsAtLeast(arguments.length,2);
 var v7641=l3.value;
 var I;
@@ -26305,7 +26246,7 @@ return v7656.$$jscl_car;
 var v7660=v7659.$$jscl_cdr;
 v7641=v7660;
 return v7659.$$jscl_car;
-})(),v7642)):l12.fvalue(v7651,'%')!==l3.value?(l3.value,l2285.fvalue('\\n',v7642)):(l3.value,l37.fvalue(l1915,v7650));
+})(),v7642)):l12.fvalue(v7651,'%')!==l3.value?(l3.value,l2285.fvalue('\n',v7642)):(l3.value,l37.fvalue(l1915,v7650));
 })(v7650);
 })(v7649);
 return (function(){var v7662=1;
@@ -26353,7 +26294,7 @@ var l2355=internals.make_lisp_string('#~d=');
 var l2356=internals.make_lisp_string('#~d#');
 var l2357=internals.make_lisp_string('NIL');
 var l2358=internals.make_lisp_string('KEYWORD');
-var l2359=internals.make_lisp_string('#\\\\');
+var l2359=internals.make_lisp_string('#\\');
 var l2360=internals.make_lisp_string('#<FUNCTION ~a>');
 var l2361=internals.make_lisp_string('#<FUNCTION>');
 var l2362=internals.intern('PRINT-OBJECT','COMMON-LISP');
@@ -26655,7 +26596,7 @@ switch(arguments.length){case 0:v7755=internals.symbolValue(l2238);
 ;
 default:break;
 }var v7756=this;
-return (function(){return (function(v7758){return l2276.fvalue(v7758)!==l3.value?internals.values1(l3.value):(l2285.fvalue('\\n',v7758),internals.values1(l2.value));
+return (function(){return (function(v7758){return l2276.fvalue(v7758)!==l3.value?internals.values1(l3.value):(l2285.fvalue('\n',v7758),internals.values1(l2.value));
 })(l2385.fvalue(v7755));
 })();
 });
@@ -26723,7 +26664,7 @@ switch(arguments.length){case 0:v7777=internals.symbolValue(l2238);
 ;
 default:break;
 }var v7778=this;
-return (function(){l2285.fvalue('\\n',v7777);
+return (function(){l2285.fvalue('\n',v7777);
 return values();
 })();
 });
@@ -26936,7 +26877,7 @@ return FUNC;
 })();
 l2427;
 var l2432=internals.intern('TRACE-FUNCTIONS');
-var l2433=internals.make_lisp_string(\"`~S' is already traced.~%\");
+var l2433=internals.make_lisp_string("`~S' is already traced.~%");
 l2432.fvalue=(function(){var FUNC=(function JSCL_USER_TRACEFUNCTIONS(v7824){internals.checkArgs(arguments.length,1);
 var v7825=this;
 return (function(){return l120.fvalue(v7824)!==l3.value?internals.mvcall(l165.fvalue,internals.symbolFunction(l270),internals.symbolValue(l2413)):(function(){return (function(v7828,v7829){(function(){while (v7828!==l3.value){v7829=v7828.$$jscl_car;
@@ -27123,14 +27064,14 @@ return internals.values1(v7872);
 })();
 });
 FUNC.fname=internals.make_lisp_string('BACKTRACE');
-FUNC.docstring=internals.make_lisp_string('Capture stack trace as a list of frames.\\n\\nCurrently represented as a list of strings. If FROM is provided and\\nappears on stack, frames including and above the topmost FROM call is\\nomitted. Note the function does NOT truncate the list according to\\n*BACKTRACE-LIMIT*.');
+FUNC.docstring=internals.make_lisp_string('Capture stack trace as a list of frames.\n\nCurrently represented as a list of strings. If FROM is provided and\nappears on stack, frames including and above the topmost FROM call is\nomitted. Note the function does NOT truncate the list according to\n*BACKTRACE-LIMIT*.');
 return FUNC;
 })();
 l2439;
 var l2445=internals.intern('*BACKTRACE-LIMIT*');
 if ((l2445.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l2445.value=20;
-var l2446=internals.make_lisp_string('Most number of stack traces to be printed by FORMAT-BACKTRACE.\\n\\nSet to NIL to always display full stack trace.');
+var l2446=internals.make_lisp_string('Most number of stack traces to be printed by FORMAT-BACKTRACE.\n\nSet to NIL to always display full stack trace.');
 l2445['vardoc']=l2446;
 l2445;
 var l2447=internals.intern('FORMAT-BACKTRACE');
@@ -27178,7 +27119,7 @@ return internals.values1(l3.value);
 })();
 });
 FUNC.fname=internals.make_lisp_string('FORMAT-BACKTRACE');
-FUNC.docstring=internals.make_lisp_string('Capture and format stack trace to STREAM.\\n\\nIf stack trace has more frames than *BACKTRACE-LIMIT*, it is\\ntruncated.');
+FUNC.docstring=internals.make_lisp_string('Capture and format stack trace to STREAM.\n\nIf stack trace has more frames than *BACKTRACE-LIMIT*, it is\ntruncated.');
 return FUNC;
 })();
 l2447;
@@ -27295,7 +27236,7 @@ if ((l2467.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l2467.value=l2457.fvalue(l2458.value,l105.fvalue(new internals.Cons('#',l3.value)));
 l2467;
 var l2468=internals.intern('MAKE-DISPATCH-MACRO-CHARACTER','COMMON-LISP');
-var l2469=internals.make_lisp_string('JSCL only supports #\\\\# as a dispatch macro character, not ~S');
+var l2469=internals.make_lisp_string('JSCL only supports #\\# as a dispatch macro character, not ~S');
 l2468.fvalue=(function(){var FUNC=(function JSCL_USER_MAKEDISPATCHMACROCHARACTER(v7913,v7914,v7915){internals.checkArgsAtLeast(arguments.length,1);
 internals.checkArgsAtMost(arguments.length,3);
 switch(arguments.length){case 1:v7914=l3.value;
@@ -27610,7 +27551,7 @@ l2498.fvalue=(function(){var FUNC=(function JSCL_USER_WHITESPACEP(v8003){interna
 var v8004=this;
 return (function(){return (function(v8006){return v8006!==l3.value?internals.values1(v8006):(function(v8007){return v8007!==l3.value?internals.values1(v8007):(function(v8008){return v8008!==l3.value?internals.values1(v8008):internals.mvcall(l23.fvalue,v8003,l30.fvalue(l2499,0));
 })(l23.fvalue(v8003,'	'));
-})(l23.fvalue(v8003,'\\n'));
+})(l23.fvalue(v8003,'\n'));
 })(l23.fvalue(v8003,' '));
 })();
 });
@@ -27638,12 +27579,12 @@ var l2501=internals.intern('TERMINATING-CHAR-P');
 l2501.fvalue=(function(){var FUNC=(function JSCL_USER_TERMINATINGCHARP(v8014){internals.checkArgs(arguments.length,1);
 var v8015=this;
 return (function(){return (function(v8017){return v8017!==l3.value?internals.values1(v8017):(function(v8018){return v8018!==l3.value?internals.values1(v8018):(function(v8019){return v8019!==l3.value?internals.values1(v8019):(function(v8020){return v8020!==l3.value?internals.values1(v8020):(function(v8021){return v8021!==l3.value?internals.values1(v8021):(function(v8022){return v8022!==l3.value?internals.values1(v8022):internals.mvcall(l23.fvalue,';',v8014);
-})(l23.fvalue(\"'\",v8014));
+})(l23.fvalue("'",v8014));
 })(l23.fvalue(',',v8014));
 })(l23.fvalue('`',v8014));
 })(l23.fvalue('(',v8014));
 })(l23.fvalue(')',v8014));
-})(l23.fvalue('\"',v8014));
+})(l23.fvalue('"',v8014));
 })();
 });
 FUNC.fname=internals.make_lisp_string('TERMINATING-CHAR-P');
@@ -27682,8 +27623,8 @@ return FUNC;
 })();
 l2502;
 var l2503=internals.intern('READ-ESCAPED-UNTIL');
-var l2504=internals.make_lisp_string('\\\\');
-var l2505=internals.make_lisp_string('\\\\');
+var l2504=internals.make_lisp_string('\\');
+var l2505=internals.make_lisp_string('\\');
 l2503.fvalue=(function(){var FUNC=(function JSCL_USER_READESCAPEDUNTIL(v8035,v8036){internals.checkArgs(arguments.length,2);
 var v8037=this;
 return (function(){return (function(v8039,v8040,v8041){(function(){return (function(){while ((v8040!==l3.value?(function(v8043){return v8043!==l3.value?v8043:l13.fvalue((function(){var F=v8036;
@@ -27725,7 +27666,7 @@ if (_R.mv!==null) ARGS=ARGS.concat(_R.mv);
 return internals.mvcall(FUNC,...ARGS);
 })();
 })();
- else if (l23.fvalue(v8040,'\\\\')!==l3.value) {l2497.fvalue(v8035);
+ else if (l23.fvalue(v8040,'\\')!==l3.value) {l2497.fvalue(v8035);
 (function(){return (function(){var FUNC=(function JSCL_USER_NIL(v8054){switch(arguments.length){case 0:v8054=l3.value;
 ;
 default:break;
@@ -27835,7 +27776,7 @@ return (function(){return (function(v8075){l2500.fvalue(v8072);
 v8075=l2496.fvalue(v8072);
 return (function(){return (function(){while ((v8075!==l3.value?l23.fvalue(v8075,';'):l3.value)!==l3.value){l2502.fvalue(v8072,(function JSCL_USER_NIL(v8077){internals.checkArgs(arguments.length,1);
 var v8078=this;
-return internals.mvcall(l23.fvalue,v8077,'\\n');
+return internals.mvcall(l23.fvalue,v8077,'\n');
 }));
 l2500.fvalue(v8072);
 v8075=l2496.fvalue(v8072);
@@ -27942,9 +27883,9 @@ var l2517=internals.intern('READ-STRING');
 l2517.fvalue=(function(){var FUNC=(function JSCL_USER_READSTRING(v8105){internals.checkArgs(arguments.length,1);
 var v8106=this;
 return (function(){return (function(v8108,v8109){v8109=l2497.fvalue(v8105);
-(function(){return (function(){while (l13.fvalue(l12.fvalue(v8109,'\"'))!==l3.value){if (l120.fvalue(v8109)!==l3.value) l37.fvalue(l2512,l211.value,v8105);
+(function(){return (function(){while (l13.fvalue(l12.fvalue(v8109,'"'))!==l3.value){if (l120.fvalue(v8109)!==l3.value) l37.fvalue(l2512,l211.value,v8105);
  else l3.value;
-if (l12.fvalue(v8109,'\\\\')!==l3.value) v8109=l2497.fvalue(v8105);
+if (l12.fvalue(v8109,'\\')!==l3.value) v8109=l2497.fvalue(v8105);
  else l3.value;
 v8108=l8.fvalue(v8108,l117.fvalue(v8109));
 v8109=l2497.fvalue(v8105);
@@ -27993,7 +27934,7 @@ return internals.mvcall(typeof F==='function'?F:F.fvalue,v8121,v8122,l3.value);
 })();
 });
 FUNC.fname=internals.make_lisp_string('READ-SHARP-DISPATCH');
-FUNC.docstring=internals.make_lisp_string(\"Look up CH in *readtable*'s dispatch table for #. If found, call it;\\notherwise signal a reader error.\");
+FUNC.docstring=internals.make_lisp_string("Look up CH in *readtable*'s dispatch table for #. If found, call it;\notherwise signal a reader error.");
 return FUNC;
 })();
 l2521;
@@ -28017,7 +27958,7 @@ case 2:v8130=l3.value;
 default:break;
 }var v8131=this;
 return (function(){l2497.fvalue(v8128);
-return (function(v8133){return (function(v8134){return l12.fvalue(v8134,\"'\")!==l3.value?(l3.value,internals.mvcall(l105.fvalue,l86,l2513.fvalue(v8128,v8129,v8130,l2.value))):l12.fvalue(v8134,'.')!==l3.value?(l3.value,internals.mvcall(l242.fvalue,l2513.fvalue(v8128))):l12.fvalue(v8134,'(')!==l3.value?(l3.value,(function(){return (function(v8136,v8137,v8138){(function(){while (l13.fvalue((l2506.fvalue(v8128),(function(v8139){return v8139!==l3.value?v8139:l23.fvalue(l2496.fvalue(v8128),')');
+return (function(v8133){return (function(v8134){return l12.fvalue(v8134,"'")!==l3.value?(l3.value,internals.mvcall(l105.fvalue,l86,l2513.fvalue(v8128,v8129,v8130,l2.value))):l12.fvalue(v8134,'.')!==l3.value?(l3.value,internals.mvcall(l242.fvalue,l2513.fvalue(v8128))):l12.fvalue(v8134,'(')!==l3.value?(l3.value,(function(){return (function(v8136,v8137,v8138){(function(){while (l13.fvalue((l2506.fvalue(v8128),(function(v8139){return v8139!==l3.value?v8139:l23.fvalue(l2496.fvalue(v8128),')');
 })(l120.fvalue(l2496.fvalue(v8128)))))!==l3.value){(function(){var v8140=[];
 try{var v8141=v8138;
 var v8147=(function JSCL_USER_NIL(){internals.checkArgsAtMost(arguments.length,0);
@@ -28115,7 +28056,7 @@ return l3.value;
 })();
 return internals.values1(v8137);
 })(l3.value,l3.value,0);
-})()):l12.fvalue(v8134,':')!==l3.value?(l3.value,new internals.Symbol(internals.xstring(l2525.fvalue(l2524.fvalue(l2503.fvalue(v8128,internals.symbolFunction(l2319))))))):l12.fvalue(v8134,'\\\\')!==l3.value?(l3.value,(function(v8169){return l1269.fvalue(v8169,l2526)!==l3.value?internals.values1(' '):l1269.fvalue(v8169,l2527)!==l3.value?internals.values1('	'):l1269.fvalue(v8169,l2528)!==l3.value?internals.values1('\\n'):internals.mvcall(l30.fvalue,v8169,0);
+})()):l12.fvalue(v8134,':')!==l3.value?(l3.value,new internals.Symbol(internals.xstring(l2525.fvalue(l2524.fvalue(l2503.fvalue(v8128,internals.symbolFunction(l2319))))))):l12.fvalue(v8134,'\\')!==l3.value?(l3.value,(function(v8169){return l1269.fvalue(v8169,l2526)!==l3.value?internals.values1(' '):l1269.fvalue(v8169,l2527)!==l3.value?internals.values1('	'):l1269.fvalue(v8169,l2528)!==l3.value?internals.values1('\n'):internals.mvcall(l30.fvalue,v8169,0);
 })(l8.fvalue(l117.fvalue(l2497.fvalue(v8128)),l2502.fvalue(v8128,internals.symbolFunction(l2319))))):(function(v8170){return v8170!==l3.value?v8170:l12.fvalue(v8134,'-');
 })(l12.fvalue(v8134,'+'))!==l3.value?(l3.value,(function(){var v8172=(function(v8173,v8174){return internals.bindSpecialBindings([l2482,l1358],[v8174,v8173],(function(){return l2513.fvalue(v8128,v8129,v8130,l2.value);
 }));
@@ -28209,10 +28150,10 @@ var l2539=internals.make_lisp_string('true');
 var l2540=internals.make_lisp_string('false');
 var l2541=internals.make_lisp_string('null');
 var l2542=internals.make_lisp_string('undefined');
-var l2543=internals.make_lisp_string('Invalid FFI descriptor. Expected #j: or #j\".');
+var l2543=internals.make_lisp_string('Invalid FFI descriptor. Expected #j: or #j".');
 l2533.fvalue=(function(){var FUNC=(function JSCL_USER_READSHARPJ(v8201){internals.checkArgs(arguments.length,1);
 var v8202=this;
-return (function(){return l23.fvalue(l2496.fvalue(v8201),'\"')!==l3.value?(function(v8204){return internals.xstring(v8204);
+return (function(){return l23.fvalue(l2496.fvalue(v8201),'"')!==l3.value?(function(v8204){return internals.xstring(v8204);
 })(l2513.fvalue(v8201)):l23.fvalue(l2496.fvalue(v8201),':')!==l3.value?(function(v8205,v8206){return (function(){return (function(){var v8209=0;
 var v8210=l1291.fvalue(':',v8205,l1262.value,v8209);
 (function(){while (l13.fvalue(l120.fvalue(v8210))!==l3.value){(function(){var v8212=l1275.fvalue(v8205,v8209,v8210);
@@ -28278,7 +28219,7 @@ if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v8239;
 if (typeof x2!='number') internals.typeError(x2,l9);
 return x1<x2?l2.value:l3.value;
-})()!==l3.value){if (l23.fvalue(l30.fvalue(v8233,v8238),'\\\\')!==l3.value) l3.value;
+})()!==l3.value){if (l23.fvalue(l30.fvalue(v8233,v8238),'\\')!==l3.value) l3.value;
  else v8236=l8.fvalue(v8236,l117.fvalue(l30.fvalue(v8233,v8238)));
 l3.value;
 v8238=l144.fvalue(v8238);
@@ -28336,7 +28277,7 @@ if (_R.mv!==null) ARGS=ARGS.concat(_R.mv);
  else ARGS.push(_R.result);
 return internals.mvcall(FUNC,...ARGS);
 })();
-})()):l23.fvalue(v8248,'\\\\')!==l3.value?(function(){return (function(){var FUNC=(function JSCL_USER_NIL(v8259){switch(arguments.length){case 0:v8259=l3.value;
+})()):l23.fvalue(v8248,'\\')!==l3.value?(function(){return (function(){var FUNC=(function JSCL_USER_NIL(v8259){switch(arguments.length){case 0:v8259=l3.value;
 ;
 default:break;
 }var v8258=l3.value;
@@ -28395,7 +28336,7 @@ var l2551=internals.make_lisp_string('JS');
 var l2552=internals.intern('SIMPLE-READER-PACKAGE-ERROR');
 var l2553=internals.intern('PACKAGE','KEYWORD');
 l2553.value=l2553;
-var l2554=internals.make_lisp_string(\"The symbol `~S' is not external in the package ~S.\");
+var l2554=internals.make_lisp_string("The symbol `~S' is not external in the package ~S.");
 l2547.fvalue=(function(){var FUNC=(function JSCL_USER_READSYMBOL(v8265){internals.checkArgs(arguments.length,1);
 var v8266=this;
 return (function(){return (function(v8268,v8269,v8270,v8271,v8272){v8272=0;
@@ -28404,7 +28345,7 @@ if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v8268;
 if (typeof x2!='number') internals.typeError(x2,l9);
 return x1<x2?l2.value:l3.value;
-})()!==l3.value?l13.fvalue(l23.fvalue(l30.fvalue(v8265,v8272),':')):l3.value)!==l3.value){if (l23.fvalue(l30.fvalue(v8265,v8272),'\\\\')!==l3.value) (function(){var v8275=1;
+})()!==l3.value?l13.fvalue(l23.fvalue(l30.fvalue(v8265,v8272),':')):l3.value)!==l3.value){if (l23.fvalue(l30.fvalue(v8265,v8272),'\\')!==l3.value) (function(){var v8275=1;
 var v8276=(function(){var x1=v8272;
 if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v8275;
@@ -29162,7 +29103,7 @@ return internals.mvcall(FUNC,...ARGS);
 })();
 })();
 }return internals.values1(v8435);
-})((l2506.fvalue(v8417),(function(v8433){return l120.fvalue(v8433)!==l3.value?v8418!==l3.value?l37.fvalue(l2512,l211.value,v8417):v8419:l23.fvalue(v8433,')')!==l3.value?v8418!==l3.value?l2509.fvalue(v8417,l2562):v8419:l23.fvalue(v8433,'(')!==l3.value?(l2497.fvalue(v8417),l2511.fvalue(v8417,v8418,v8419)):l23.fvalue(v8433,\"'\")!==l3.value?(l2497.fvalue(v8417),l105.fvalue(l128,l2513.fvalue(v8417,v8418,v8419,l2.value))):l23.fvalue(v8433,'`')!==l3.value?(l2497.fvalue(v8417),l105.fvalue(l2563,l2513.fvalue(v8417,v8418,v8419,l2.value))):l23.fvalue(v8433,'\"')!==l3.value?(l2497.fvalue(v8417),l2517.fvalue(v8417)):l23.fvalue(v8433,',')!==l3.value?(l2497.fvalue(v8417),l12.fvalue(l2496.fvalue(v8417),'@')!==l3.value?(l2497.fvalue(v8417),l105.fvalue(l2564,l2513.fvalue(v8417,v8418,v8419,l2.value))):l105.fvalue(l2565,l2513.fvalue(v8417,v8418,v8419,l2.value))):l23.fvalue(v8433,'#')!==l3.value?l2523.fvalue(v8417,v8418,v8419):(function(v8434){return internals.symbolValue(l2482)!==l3.value?l3.value:l2516.fvalue(v8434);
+})((l2506.fvalue(v8417),(function(v8433){return l120.fvalue(v8433)!==l3.value?v8418!==l3.value?l37.fvalue(l2512,l211.value,v8417):v8419:l23.fvalue(v8433,')')!==l3.value?v8418!==l3.value?l2509.fvalue(v8417,l2562):v8419:l23.fvalue(v8433,'(')!==l3.value?(l2497.fvalue(v8417),l2511.fvalue(v8417,v8418,v8419)):l23.fvalue(v8433,"'")!==l3.value?(l2497.fvalue(v8417),l105.fvalue(l128,l2513.fvalue(v8417,v8418,v8419,l2.value))):l23.fvalue(v8433,'`')!==l3.value?(l2497.fvalue(v8417),l105.fvalue(l2563,l2513.fvalue(v8417,v8418,v8419,l2.value))):l23.fvalue(v8433,'"')!==l3.value?(l2497.fvalue(v8417),l2517.fvalue(v8417)):l23.fvalue(v8433,',')!==l3.value?(l2497.fvalue(v8417),l12.fvalue(l2496.fvalue(v8417),'@')!==l3.value?(l2497.fvalue(v8417),l105.fvalue(l2564,l2513.fvalue(v8417,v8418,v8419,l2.value))):l105.fvalue(l2565,l2513.fvalue(v8417,v8418,v8419,l2.value))):l23.fvalue(v8433,'#')!==l3.value?l2523.fvalue(v8417,v8418,v8419):(function(v8434){return internals.symbolValue(l2482)!==l3.value?l3.value:l2516.fvalue(v8434);
 })(l2503.fvalue(v8417,internals.symbolFunction(l2319)));
 })(l2496.fvalue(v8417))));
 })(internals.symbolValue(l2483),internals.symbolValue(l2491));
@@ -29427,7 +29368,7 @@ return (typeof F==='function'?F:F.fvalue)('path');
 })();
 } else l3.value;
 var l2601=internals.intern('RECEIVE-XHR');
-var l2602=internals.make_lisp_string(\"Can't open ~a: ~a ~a\");
+var l2602=internals.make_lisp_string("Can't open ~a: ~a ~a");
 var l2603=internals.make_lisp_string('onreadystatechange');
 l2601.fvalue=(function(){var FUNC=(function JSCL_USER_RECEIVEXHR(v8514,v8515,v8516,v8517,v8518){internals.checkArgsAtLeast(arguments.length,4);
 internals.checkArgsAtMost(arguments.length,5);
@@ -29528,7 +29469,7 @@ var l2614=internals.make_lisp_string('No such file ~s');
 var l2615=internals.intern('WEB-WORKER','KEYWORD');
 l2615.value=l2615;
 var l2616=internals.make_lisp_string('GET');
-var l2617=internals.make_lisp_string(\"Synchronous file input not supported on this platform, try `:sync nil'\");
+var l2617=internals.make_lisp_string("Synchronous file input not supported on this platform, try `:sync nil'");
 var l2618=internals.make_lisp_string('GET');
 var l2619=internals.intern('OUTPUT','KEYWORD');
 l2619.value=l2619;
@@ -29630,7 +29571,7 @@ return values(v8575,l3.value);
 })();
 });
 FUNC.fname=internals.make_lisp_string('ENSURE-DIRECTORIES-EXIST');
-FUNC.docstring=internals.make_lisp_string(\"Create directories for PATH if they don't exist.\");
+FUNC.docstring=internals.make_lisp_string("Create directories for PATH if they don't exist.");
 return FUNC;
 })();
 l2627;
@@ -29683,15 +29624,15 @@ if ((l2634.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l2634.value=l2.value;
 l2634;
 var l2635=internals.intern('JS-ESCAPE-STRING');
-var l2636=internals.make_lisp_string('\\\\');
-var l2637=internals.make_lisp_string('\\\\');
-var l2638=internals.make_lisp_string('\\\\');
-var l2639=internals.make_lisp_string(\"'\");
-var l2640=internals.make_lisp_string(\"'\");
-var l2641=internals.make_lisp_string('\"');
-var l2642=internals.make_lisp_string('\"');
-var l2643=internals.make_lisp_string(\"'\");
-var l2644=internals.make_lisp_string(\"'\");
+var l2636=internals.make_lisp_string('\\');
+var l2637=internals.make_lisp_string('\\');
+var l2638=internals.make_lisp_string('\\');
+var l2639=internals.make_lisp_string("'");
+var l2640=internals.make_lisp_string("'");
+var l2641=internals.make_lisp_string('"');
+var l2642=internals.make_lisp_string('"');
+var l2643=internals.make_lisp_string("'");
+var l2644=internals.make_lisp_string("'");
 l2635.fvalue=(function(){var FUNC=(function JSCL_USER_JSESCAPESTRING(v8587){internals.checkArgs(arguments.length,1);
 var v8588=this;
 return (function(){return (function(v8590,v8591,v8592,v8593){return (function(v8605){(function(){return (function(){while ((function(){var x1=v8590;
@@ -29699,9 +29640,9 @@ if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v8591;
 if (typeof x2!='number') internals.typeError(x2,l9);
 return x1<x2?l2.value:l3.value;
-})()!==l3.value){(function(v8607){if (l23.fvalue(v8607,\"'\")!==l3.value) v8592=l2.value;
+})()!==l3.value){(function(v8607){if (l23.fvalue(v8607,"'")!==l3.value) v8592=l2.value;
  else l3.value;
-return l23.fvalue(v8607,'\"')!==l3.value?(v8593=l2.value):l3.value;
+return l23.fvalue(v8607,'"')!==l3.value?(v8593=l2.value):l3.value;
 })(l30.fvalue(v8587,v8590));
 (function(){var v8609=1;
 var v8610=(function(){var x1=v8590;
@@ -29723,11 +29664,11 @@ if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v8591;
 if (typeof x2!='number') internals.typeError(x2,l9);
 return x1<x2?l2.value:l3.value;
-})()!==l3.value){(function(v8601){if (l23.fvalue(v8601,'\\\\')!==l3.value) v8598=l8.fvalue(v8598,l2636);
+})()!==l3.value){(function(v8601){if (l23.fvalue(v8601,'\\')!==l3.value) v8598=l8.fvalue(v8598,l2636);
  else l3.value;
-if ((v8595!==l3.value?l23.fvalue(v8601,\"'\"):l3.value)!==l3.value) v8598=l8.fvalue(v8598,l2637);
+if ((v8595!==l3.value?l23.fvalue(v8601,"'"):l3.value)!==l3.value) v8598=l8.fvalue(v8598,l2637);
  else l3.value;
-if (l23.fvalue(v8601,'\\n')!==l3.value) {v8598=l8.fvalue(v8598,l2638);
+if (l23.fvalue(v8601,'\n')!==l3.value) {v8598=l8.fvalue(v8598,l2638);
 v8601='n';
 } else l3.value;
 return v8598=l8.fvalue(v8598,l117.fvalue(v8601));
@@ -30188,7 +30129,7 @@ var l2810=internals.intern('>>>=');
 var l2811=internals.make_lisp_string('>>>=');
 var l2812=internals.make_lisp_string(',');
 var l2813=internals.make_lisp_string(',');
-var l2814=internals.make_lisp_string(\"Unknown operator `~S'\");
+var l2814=internals.make_lisp_string("Unknown operator `~S'");
 l2692.fvalue=(function(){var FUNC=(function JSCL_USER_JSOPERATOREXPRESSION(v8695,v8696,v8697,v8698,v8699){internals.checkArgs(arguments.length,5);
 var v8700=this;
 return (function(){try{var v8701=[];
@@ -30366,7 +30307,7 @@ var l2838=internals.make_lisp_string('switch(');
 var l2839=internals.make_lisp_string('){');
 var l2840=internals.intern('CASE','COMMON-LISP');
 var l2841=internals.make_lisp_string('case ');
-var l2842=internals.make_lisp_string(\"Non-constant switch case `~S'.\");
+var l2842=internals.make_lisp_string("Non-constant switch case `~S'.");
 var l2843=internals.make_lisp_string(':');
 var l2844=internals.intern('DEFAULT');
 var l2845=internals.make_lisp_string('default:');
@@ -31572,7 +31513,7 @@ return FUNC;
 })();
 l167;
 var l2969=internals.intern('REPORT-UNDEFINED-FUNCTIONS');
-var l2970=internals.make_lisp_string(\"The function `~a' is undefined.~%\");
+var l2970=internals.make_lisp_string("The function `~a' is undefined.~%");
 l2969.fvalue=(function(){var FUNC=(function JSCL_USER_REPORTUNDEFINEDFUNCTIONS(){internals.checkArgsAtMost(arguments.length,0);
 var v9234=this;
 return (function(){(function(){return (function(v9237,v9238){(function(){while (v9237!==l3.value){v9238=v9237.$$jscl_car;
@@ -31699,7 +31640,7 @@ return FUNC;
 })();
 l2978;
 var l2979=internals.intern('LL-REST-ARGUMENT');
-var l2980=internals.make_lisp_string(\"Bad lambda-list `~S'.\");
+var l2980=internals.make_lisp_string("Bad lambda-list `~S'.");
 l2979.fvalue=(function(){var FUNC=(function JSCL_USER_LLRESTARGUMENT(v9272){internals.checkArgs(arguments.length,1);
 var v9273=this;
 return (function(){return (function(v9275){if (v9275.$$jscl_cdr!==l3.value) l37.fvalue(l2980,v9272);
@@ -32380,7 +32321,7 @@ if ((l3087.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l3087.value=l3.value;
 l3087;
 var l3088=internals.intern('data');
-var l3089=internals.make_lisp_string(\"How should I dump `~S'?\");
+var l3089=internals.make_lisp_string("How should I dump `~S'?");
 var l3091=internals.make_lisp_string('value');
 var l3090=internals.QIList(l3091,l3);
 l3078.fvalue=(function(){var FUNC=(function JSCL_USER_LITERAL(v9506){internals.checkArgs(arguments.length,1);
@@ -33023,7 +32964,7 @@ if (_R.mv!==null) ARGS=ARGS.concat(_R.mv);
 return internals.mvcall(FUNC,...ARGS);
 })();
 })();
-var l3155=internals.make_lisp_string(\"Return from unknown block `~S'.\");
+var l3155=internals.make_lisp_string("Return from unknown block `~S'.");
 var l3156=internals.intern('_R');
 var l3157=internals.intern('withMV');
 var l3159=internals.make_lisp_string('result');
@@ -33275,7 +33216,7 @@ if (_R.mv!==null) ARGS=ARGS.concat(_R.mv);
 return internals.mvcall(FUNC,...ARGS);
 })();
 })();
-var l3212=internals.make_lisp_string(\"Unknown tag `~S'\");
+var l3212=internals.make_lisp_string("Unknown tag `~S'");
 (function(){var v9837=l1807;
 var v9838=internals.symbolValue(l2971);
 return (function(){var FUNC=(function JSCL_USER_NIL(v9840){switch(arguments.length){case 0:v9840=l3.value;
@@ -36372,8 +36313,8 @@ return internals.mvcall(FUNC,...ARGS);
 })();
 })();
 var l3514=internals.intern('%JS-TRY');
-var l3515=internals.make_lisp_string(\"Bad CATCH clausule `~S'.\");
-var l3516=internals.make_lisp_string(\"Bad FINALLY clausule `~S'.\");
+var l3515=internals.make_lisp_string("Bad CATCH clausule `~S'.");
+var l3516=internals.make_lisp_string("Bad FINALLY clausule `~S'.");
 (function(){var v10986=l3514;
 var v10987=internals.symbolValue(l2971);
 return (function(){var FUNC=(function JSCL_USER_NIL(v10989){switch(arguments.length){case 0:v10989=l3.value;
@@ -36611,7 +36552,7 @@ return FUNC;
 l3525;
 var l3526=internals.intern('COMPILE-FUNCALL');
 var l3527=internals.QIList(l151,l231,l3);
-var l3528=internals.make_lisp_string(\"Bad function designator `~S'\");
+var l3528=internals.make_lisp_string("Bad function designator `~S'");
 var l3530=internals.make_lisp_string('fvalue');
 var l3529=internals.QIList(l3530,l3);
 var l3531=internals.make_lisp_string('fvalue');
@@ -36838,7 +36779,7 @@ default:break;
 }var v11136=this;
 return (function(){return (function(v11139){return internals.mvcall(l1275.fvalue,v11134,0,v11139);
 })((function(v11138){return v11138!==l3.value?v11138:l462.fvalue(v11135,l142.fvalue(v11134));
-})(l1291.fvalue('\\n',v11134)));
+})(l1291.fvalue('\n',v11134)));
 })();
 });
 FUNC.fname=internals.make_lisp_string('TRUNCATE-STRING');
@@ -36950,7 +36891,7 @@ return internals.values1(l3.value);
 })();
 });
 FUNC.fname=internals.make_lisp_string('DUMP-GLOBAL-ENVIRONMENT');
-FUNC.docstring=internals.make_lisp_string('Dump the global environment to STREAM.\\n\\nMacro bindings are wrapped with *magic-unquote-marker* so the compiler\\nwill compile them instead of quoting them. See the literal function in\\ncompiler.lisp for details.');
+FUNC.docstring=internals.make_lisp_string('Dump the global environment to STREAM.\n\nMacro bindings are wrapped with *magic-unquote-marker* so the compiler\nwill compile them instead of quoting them. See the literal function in\ncompiler.lisp for details.');
 return FUNC;
 })();
 l3546;
@@ -37494,13 +37435,13 @@ var l3609=internals.QIList(l1464,l3610,l3594,l3,l315,l3,l3596,l3,l3597,l3586,l3)
 var l3591=internals.QIList(l3592,l3598,l3602,l3604,l3605,l3607,l3609,l3);
 if ((l3590.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l3590.value=l3591;
-var l3611=internals.make_lisp_string(\"standard-class's class-slots descriptor\");
+var l3611=internals.make_lisp_string("standard-class's class-slots descriptor");
 l3590['vardoc']=l3611;
 l3590;
 var l3612=internals.intern('*POSITION-SLOTS-OF-STANDARD-CLASS*');
 if ((l3612.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l3612.value=l252.fvalue(l204.value,internals.symbolFunction(l11));
-var l3613=internals.make_lisp_string(\"standard-class's class-slots position\");
+var l3613=internals.make_lisp_string("standard-class's class-slots position");
 l3612['vardoc']=l3613;
 l3612;
 var l3615=internals.QIList(l3593,0,l3);
@@ -38263,7 +38204,7 @@ return FUNC;
 })();
 l3685;
 var l3686=internals.intern('ENSURE-CLASS');
-var l3687=internals.make_lisp_string(\"Can't redefine the class named ~S.\");
+var l3687=internals.make_lisp_string("Can't redefine the class named ~S.");
 var l3688=internals.intern('MAKE-INSTANCE-STANDARD-CLASS');
 var l3689=internals.intern('MAKE-INSTANCE','COMMON-LISP');
 l3686.fvalue=(function(){var FUNC=(function JSCL_USER_ENSURECLASS(v11598){internals.checkArgsAtLeast(arguments.length,1);
@@ -43054,7 +42995,7 @@ return l3.value;
 })();
 l4333.fvalue(v13158);
 l1699.fvalue(l2.value,l4336,l1548.fvalue(l1559.fvalue(v13158)),v13158);
-l2285.fvalue('\\n',v13157);
+l2285.fvalue('\n',v13157);
 return internals.values1(l3.value);
 })(internals.symbolValue(l2238),l4329.fvalue(l4212,v13154,v13153));
 })();
@@ -44728,7 +44669,7 @@ var l4498=internals.intern('DAS!PARSE-DEFSTRUCT-OPTIONS');
 var l4499=internals.QIList(l4373,l4484,l4374,l1467,l3);
 var l4500=internals.make_lisp_string('Bad syntax DEFSTRUCT option: ~S.');
 var l4501=internals.make_lisp_string('Multiple default constructor defined.');
-var l4502=internals.make_lisp_string(\"(:constructor nil) combined with other :constructor's.\");
+var l4502=internals.make_lisp_string("(:constructor nil) combined with other :constructor's.");
 var l4503=internals.make_lisp_string('MAKE-');
 var l4504=internals.make_lisp_string('Structure ~s not exists.');
 var l4505=internals.make_lisp_string('Incompatible structure type (~a ~a : ~a ~a)');
@@ -45093,7 +45034,7 @@ return FUNC;
 l4516;
 var l4527=internals.intern('DAS!MAKE-PREDICATE');
 var l4528=internals.make_lisp_string('predicate ~a unsupplied for unnamed vector/list structure ');
-var l4529=internals.make_lisp_string(\"BUG: '~a does not occur in prototype ~a\");
+var l4529=internals.make_lisp_string("BUG: '~a does not occur in prototype ~a");
 var l4530=internals.QIList(l4519,l3);
 var l4531=internals.QIList(l3413,l4519,l3);
 var l4532=internals.QIList(l142,l4519,l3);
@@ -45914,7 +45855,7 @@ if ((l4621.value!==internals.UNBOUND?l2.value:l3.value)!==l3.value) l3.value;
  else l4621.value=l190.fvalue(l973.value,l1158.value,l3.value);
 l4621;
 var l4622=internals.intern('%PRINT-FORMAT-ERROR');
-var l4623=internals.make_lisp_string('~:[~;Error in format: ~]~\\n	      ~?~@[~%  ~A~%  ~V@T^~]');
+var l4623=internals.make_lisp_string('~:[~;Error in format: ~]~\n	      ~?~@[~%  ~A~%  ~V@T^~]');
 var l4624=internals.intern('FORMAT-ERROR-PRINT-BANNER');
 var l4625=internals.intern('FORMAT-ERROR-COMPLAINT');
 var l4626=internals.intern('FORMAT-ERROR-ARGUMENTS');
@@ -46019,7 +45960,7 @@ return (function(){return internals.mvcall(l13.fvalue,l120.fvalue(v14072));
 l4631;
 var l4657=internals.intern('TOKENIZE-CONTROL-STRING');
 var l4658=internals.intern('PARSE-DIRECTIVE');
-var l4659=internals.make_lisp_string('A justification directive cannot be in the same format string~%~\\n                         as ~~W, ~~I, ~~:T, or a logical-block directive.');
+var l4659=internals.make_lisp_string('A justification directive cannot be in the same format string~%~\n                         as ~~W, ~~I, ~~:T, or a logical-block directive.');
 l4657.fvalue=(function(){var FUNC=(function JSCL_USER_TOKENIZECONTROLSTRING(v14086){internals.checkArgs(arguments.length,1);
 var v14087=this;
 return (function(){return (function(v14089,v14090,v14091,v14092,v14093,v14094,v14095){(function(){try{var v14096=[];
@@ -46323,7 +46264,7 @@ return x1-x2;
 return v14148=v14200;
 })()):(l3.value,(function(){throw new internals.BlockNLX(v14156,l3.value,null,'NIL');
 })());
-})(v14155())):l23.fvalue(v14159,\"'\")!==l3.value?((function(){var v14202=1;
+})(v14155())):l23.fvalue(v14159,"'")!==l3.value?((function(){var v14202=1;
 var v14203=(function(){var x1=v14148;
 if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v14202;
@@ -46507,7 +46448,7 @@ TAIL=TAIL.$$jscl_cdr;
 })();
 });
 FUNC.fname=internals.make_lisp_string('%FORMAT');
-FUNC.docstring=internals.make_lisp_string('Provides various facilities for formatting output.\\n  CONTROL-STRING contains a string to be output, possibly with embedded\\n  directives, which are flagged with the escape character \"~\".  Directives\\n  generally expand into additional text to be output, usually consuming one\\n  or more of the FORMAT-ARGUMENTS in the process.  A few useful directives\\n  are:\\n        ~A or ~nA     Prints one argument as if by PRINC\\n        ~S or ~nS     Prints one argument as if by PRIN1\\n        ~D or ~nD     Prints one argument as a decimal integer\\n        ~%            Does a TERPRI\\n        ~&            Does a FRESH-LINE\\n\\n         where n is the width of the field in which the object is printed.\\n\\n  DESTINATION controls where the result will go.  If DESTINATION is T, then\\n  the output is sent to the standard output stream.  If it is NIL, then the\\n  output is returned in a string as the value of the call.  Otherwise,\\n  DESTINATION must be a stream to which the output will be sent.\\n\\n  Example:   (FORMAT NIL \"The answer is ~D.\" 10) => \"The answer is 10.\"\\n\\n  FORMAT has many additional capabilities not described here.  Consult\\n  Section 22.3 (Formatted Output) of the ANSI Common Lisp standard for\\n  details.');
+FUNC.docstring=internals.make_lisp_string('Provides various facilities for formatting output.\n  CONTROL-STRING contains a string to be output, possibly with embedded\n  directives, which are flagged with the escape character "~".  Directives\n  generally expand into additional text to be output, usually consuming one\n  or more of the FORMAT-ARGUMENTS in the process.  A few useful directives\n  are:\n        ~A or ~nA     Prints one argument as if by PRINC\n        ~S or ~nS     Prints one argument as if by PRIN1\n        ~D or ~nD     Prints one argument as a decimal integer\n        ~%            Does a TERPRI\n        ~&            Does a FRESH-LINE\n\n         where n is the width of the field in which the object is printed.\n\n  DESTINATION controls where the result will go.  If DESTINATION is T, then\n  the output is sent to the standard output stream.  If it is NIL, then the\n  output is returned in a string as the value of the call.  Otherwise,\n  DESTINATION must be a stream to which the output will be sent.\n\n  Example:   (FORMAT NIL "The answer is ~D." 10) => "The answer is 10."\n\n  FORMAT has many additional capabilities not described here.  Consult\n  Section 22.3 (Formatted Output) of the ANSI Common Lisp standard for\n  details.');
 return FUNC;
 })();
 l4673;
@@ -50086,8 +50027,8 @@ l5927;
 l4696.fvalue('~',internals.symbolFunction(l5927));
 var l5933=internals.intern('NEWLINE-FORMAT-DIRECTIVE-EXPANDER');
 var l5934=internals.make_lisp_string('Cannot specify both colon and atsign for this directive.');
-var l5935=internals.QIList(l2285,'\\n',l65,l3);
-var l5936=internals.QIList(' ','\\n','	',l3);
+var l5935=internals.QIList(l2285,'\n',l65,l3);
+var l5936=internals.QIList(' ','\n','	',l3);
 l5933.fvalue=(function(){var FUNC=(function JSCL_USER_NEWLINEFORMATDIRECTIVEEXPANDER(v15322,v15323){internals.checkArgs(arguments.length,2);
 var v15324=this;
 return (function(){return (function(v15326,v15327,v15328){if ((v15326!==l3.value?v15327:l3.value)!==l3.value) l37.fvalue(l4631,l4634.value,l5934);
@@ -50103,7 +50044,7 @@ FUNC.fname=internals.make_lisp_string('NEWLINE-FORMAT-DIRECTIVE-EXPANDER');
 return FUNC;
 })();
 l5933;
-l4696.fvalue('\\n',internals.symbolFunction(l5933));
+l4696.fvalue('\n',internals.symbolFunction(l5933));
 var l5937=internals.intern('T-FORMAT-DIRECTIVE-EXPANDER');
 var l5938=internals.QIList(l2285,'	',l65,l3);
 l5937.fvalue=(function(){var FUNC=(function JSCL_USER_TFORMATDIRECTIVEEXPANDER(v15330,v15331){internals.checkArgs(arguments.length,2);
@@ -50236,7 +50177,7 @@ var l5958=internals.QIList(l142,l4684,l3);
 var l5957=internals.QIList(l5958,l3);
 var l5959=internals.QIList(l4684,l3);
 var l5960=internals.QIList(l128,l4631,l3);
-var l5961=internals.make_lisp_string('Index ~D out of bounds.  Should have been ~\\n				    between 0 and ~D.');
+var l5961=internals.make_lisp_string('Index ~D out of bounds.  Should have been ~\n				    between 0 and ~D.');
 var l5963=internals.QIList(l142,l4684,l3);
 var l5962=internals.QIList(l5963,l3);
 var l5964=new internals.Symbol('G70419');
@@ -50253,7 +50194,7 @@ var l5973=internals.QIList(l456,0,l5972,l5974,l3);
 var l5976=internals.QIList(l417,l5972,l4684,l3);
 var l5975=internals.QIList(l34,l3228,l5976,l3);
 var l5977=internals.QIList(l128,l4631,l3);
-var l5978=internals.make_lisp_string('Index ~D out of bounds.  Should have been ~\\n				between 0 and ~D.');
+var l5978=internals.make_lisp_string('Index ~D out of bounds.  Should have been ~\n				between 0 and ~D.');
 var l5980=internals.QIList(l142,l4684,l3);
 var l5979=internals.QIList(l105,l5972,l5980,l3);
 var l5981=new internals.Symbol('G70426');
@@ -51792,7 +51733,7 @@ return FUNC;
 l6118;
 var l6121=internals.make_lisp_string('No parameters can be supplied with ~~<...~~:>.');
 var l6122=internals.intern('ADD-FILL-STYLE-NEWLINES');
-var l6123=internals.make_lisp_string('Cannot include format directives inside the ~\\n			       ~:[suffix~;prefix~] segment of ~~<...~~:>');
+var l6123=internals.make_lisp_string('Cannot include format directives inside the ~\n			       ~:[suffix~;prefix~] segment of ~~<...~~:>');
 var l6124=internals.make_lisp_string('Too many segments for ~~<...~~:>.');
 var l6125=internals.make_lisp_string('(');
 var l6126=internals.make_lisp_string(')');
@@ -51891,7 +51832,7 @@ if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=l142.fvalue(v15984);
 if (typeof x2!='number') internals.typeError(x2,l9);
 return x1+x2;
-})())):new internals.Cons(v15984,l6122.fvalue(v15978.$$jscl_cdr,v15979,l4610.fvalue(v15984),l23.fvalue(l4612.fvalue(v15984),'\\n')));
+})())):new internals.Cons(v15984,l6122.fvalue(v15978.$$jscl_cdr,v15979,l4610.fvalue(v15984),l23.fvalue(l4612.fvalue(v15984),'\n')));
 })(v15978.$$jscl_car):internals.values1(l3.value);
 })();
 });
@@ -52092,7 +52033,7 @@ l6137;
 var l6142=internals.make_lisp_string('loading documentation.lisp!');
 console.log(internals.xstring(l6142));
 var l6143=internals.intern('DOCUMENTATION','COMMON-LISP');
-var l6144=internals.make_lisp_string(\"The type of documentation `~S' is not a symbol.\");
+var l6144=internals.make_lisp_string("The type of documentation `~S' is not a symbol.");
 var l6145=internals.intern('STRUCTURE','COMMON-LISP');
 l6143.fvalue=(function(){var FUNC=(function JSCL_USER_DOCUMENTATION(v16068,v16069){internals.checkArgs(arguments.length,2);
 var v16070=this;
@@ -52110,7 +52051,7 @@ return FUNC;
 l6143;
 var l6146=internals.intern('SET-DOCUMENTATION');
 var l6147=internals.make_lisp_string('docstring');
-var l6148=internals.make_lisp_string(\"The type of documentation `~S' is not a symbol.\");
+var l6148=internals.make_lisp_string("The type of documentation `~S' is not a symbol.");
 var l6149=internals.make_lisp_string('vardoc');
 var l6150=internals.make_lisp_string('docstring');
 l6146.fvalue=(function(){var FUNC=(function JSCL_USER_SETDOCUMENTATION(v16076,v16077,v16078){internals.checkArgs(arguments.length,3);
@@ -52856,7 +52797,7 @@ var l6209=internals.QIList(l273,l299,l6210,l3);
 var l6213=internals.intern('WITH-PP-BUFFER');
 var l6215=internals.intern('BUF');
 var l6214=internals.QIList(l6215,l3);
-var l6217=internals.make_lisp_string('A CLOS object\\n             Printed representation: ~S\\n             Class: ~S\\n             Structure ');
+var l6217=internals.make_lisp_string('A CLOS object\n             Printed representation: ~S\n             Class: ~S\n             Structure ');
 var l6218=internals.QIList(l1559,l273,l3);
 var l6216=internals.QIList(l1699,l6215,l6217,l273,l6218,l3);
 var l6221=internals.intern('SN');
@@ -52879,9 +52820,9 @@ var l6234=internals.QIList(l6235,l6215,l65,l3);
 var l6212=internals.QIList(l6213,l6214,l6216,l6219,l6232,l6234,l3);
 var l6236=internals.QIList(l48,l3);
 var l6211=internals.QIList(l432,l6192,l6212,l6236,l3);
-var l6237=internals.make_lisp_string('A CLOS object\\n             Printed representation: ');
-var l6238=internals.make_lisp_string('\\n             Class: ');
-var l6239=internals.make_lisp_string('\\n             Structure ');
+var l6237=internals.make_lisp_string('A CLOS object\n             Printed representation: ');
+var l6238=internals.make_lisp_string('\n             Class: ');
+var l6239=internals.make_lisp_string('\n             Structure ');
 var l6240=internals.make_lisp_string('             ');
 var l6241=internals.make_lisp_string(' <- [');
 var l6242=internals.make_lisp_string(']');
@@ -54769,9 +54710,9 @@ return FUNC;
 })();
 l6729;
 var l6736=internals.intern('%WRITE-FILE-PROLOGUE');
-var l6737=internals.make_lisp_string(\"if (typeof importScripts !== 'undefined') importScripts('~A~A.js');\\n(function(jscl){\\n'use strict';\\n(function(internals){ var values = internals.values;\");
-var l6738=internals.make_lisp_string(\"if (typeof importScripts !== 'undefined') importScripts('\");
-var l6739=internals.make_lisp_string(\".js');\\n(function(jscl){\\n'use strict';\\n(function(internals){ var values = internals.values;\");
+var l6737=internals.make_lisp_string("if (typeof importScripts !== 'undefined') importScripts('~A~A.js');\n(function(jscl){\n'use strict';\n(function(internals){ var values = internals.values;");
+var l6738=internals.make_lisp_string("if (typeof importScripts !== 'undefined') importScripts('");
+var l6739=internals.make_lisp_string(".js');\n(function(jscl){\n'use strict';\n(function(internals){ var values = internals.values;");
 l6736.fvalue=(function(){var FUNC=(function JSCL_USER_WRITEFILEPROLOGUE(v16879,v16880,v16881){internals.checkArgs(arguments.length,3);
 var v16882=this;
 return (function(){return internals.mvcall(l4674.fvalue,v16879,(function JSCL_USER_NIL(v16885,v16886,v16887){internals.checkArgsAtLeast(arguments.length,1);
@@ -54798,9 +54739,9 @@ return FUNC;
 })();
 l6736;
 var l6740=internals.intern('%WRITE-FILE-EPILOGUE');
-var l6741=internals.make_lisp_string(\"})(jscl.internals);\\n})( typeof require !== 'undefined'? require('~A~A'):\\ntypeof window !== 'undefined'? window.jscl: self.jscl )\");
-var l6742=internals.make_lisp_string(\"})(jscl.internals);\\n})( typeof require !== 'undefined'? require('\");
-var l6743=internals.make_lisp_string(\"'):\\ntypeof window !== 'undefined'? window.jscl: self.jscl )\");
+var l6741=internals.make_lisp_string("})(jscl.internals);\n})( typeof require !== 'undefined'? require('~A~A'):\ntypeof window !== 'undefined'? window.jscl: self.jscl )");
+var l6742=internals.make_lisp_string("})(jscl.internals);\n})( typeof require !== 'undefined'? require('");
+var l6743=internals.make_lisp_string("'):\ntypeof window !== 'undefined'? window.jscl: self.jscl )");
 l6740.fvalue=(function(){var FUNC=(function JSCL_USER_WRITEFILEEPILOGUE(v16890,v16891,v16892){internals.checkArgs(arguments.length,3);
 var v16893=this;
 return (function(){return internals.mvcall(l4674.fvalue,v16890,(function JSCL_USER_NIL(v16896,v16897,v16898){internals.checkArgsAtLeast(arguments.length,1);
@@ -54902,7 +54843,7 @@ var l6750=internals.intern('COMPILE-FILE','COMMON-LISP');
 var l6751=internals.intern('OUTPUT-FILE','KEYWORD');
 l6751.value=l6751;
 var l6752=internals.make_lisp_string('.js');
-var l6753=internals.make_lisp_string(\"module.exports = function(jscl){'use strict';\\n(function(internals){ var values = internals.values;\");
+var l6753=internals.make_lisp_string("module.exports = function(jscl){'use strict';\n(function(internals){ var values = internals.values;");
 var l6754=internals.make_lisp_string('})(jscl.internals);};');
 var l6755=internals.make_lisp_string('module.exports.jsclVersion = ~S;');
 var l6756=internals.make_lisp_string('module.exports.jsclVersion = ');
@@ -54990,7 +54931,7 @@ var l6781=internals.intern('REQUIRE','COMMON-LISP');
 var l6782=internals.make_lisp_string('Cannot load ~a: compiled with JSCL ~a but current is ~a');
 var l6783=internals.make_lisp_string('unknown');
 var l6784=internals.intern('LOAD-JS');
-var l6785=internals.make_lisp_string(\"Don't know how to LOAD ~a: ~a\");
+var l6785=internals.make_lisp_string("Don't know how to LOAD ~a: ~a");
 l3540.fvalue=(function(){var FUNC=(function JSCL_USER_LOAD(v16942){internals.checkArgsAtLeast(arguments.length,1);
 var v16943;
 var v16944;
@@ -56665,7 +56606,7 @@ return internals.mvcall(l16.fvalue,l2607,l16.fvalue(l151,l105.fvalue(v17551),v17
 })();
 })();
 });
-FUNC.docstring=internals.make_lisp_string(\"SYNC can be T, NIL or :MAYBE. Defaults to T, which require\\nsynchronous operation and signals error on platforms that don't\\nsupport it. If NIL, always perform asynchronous operation, evaluates\\nBODY in a callback. If :MAYBE, run synchronously on supported platform\\nand asynchronously otherwise.\");
+FUNC.docstring=internals.make_lisp_string("SYNC can be T, NIL or :MAYBE. Defaults to T, which require\nsynchronous operation and signals error on platforms that don't\nsupport it. If NIL, always perform asynchronous operation, evaluates\nBODY in a callback. If :MAYBE, run synchronously on supported platform\nand asynchronously otherwise.");
 return FUNC;
 })();
 var l7379={dt_Name: l264,structDescriptors: l2883,NAME0: l1801,TYPE1: l2935,VALUE2: l7380,DECLARATIONS3: l3};
@@ -56868,7 +56809,7 @@ return internals.values1(l7442);
 })();
 })();
 });
-FUNC.docstring=internals.make_lisp_string('Causes the iteration to terminate \"normally\", the same as implicit\\ntermination by an iteration driving clause, or by use of WHILE or\\nUNTIL -- the epilogue code (if any) will be run, and any implicitly\\ncollected result will be returned as the value of the LOOP.');
+FUNC.docstring=internals.make_lisp_string('Causes the iteration to terminate "normally", the same as implicit\ntermination by an iteration driving clause, or by use of WHILE or\nUNTIL -- the epilogue code (if any) will be run, and any implicitly\ncollected result will be returned as the value of the LOOP.');
 return FUNC;
 })();
 var l7440={dt_Name: l264,structDescriptors: l2883,NAME0: l7432,TYPE1: l2935,VALUE2: l7441,DECLARATIONS3: l3};
@@ -57769,7 +57710,7 @@ return (function(v18091,v18092,v18093,v18094){return internals.mvcall(l105.fvalu
 })();
 })();
 });
-FUNC.docstring=internals.make_lisp_string('Iterate through SEQ and collect into a sequence of the same type.\\n\\nIf TEST-FORM evaluates to false, copy the elements verbatim. If\\nTEST-FORM evaluates to true, run BODY. BODY has access to a local\\nmacro COLLECT which can be used to accumulate value (if COLLECT is not\\nused, the element is effectively dropped).\\n\\nThe return value will share structure with SEQ if possible.');
+FUNC.docstring=internals.make_lisp_string('Iterate through SEQ and collect into a sequence of the same type.\n\nIf TEST-FORM evaluates to false, copy the elements verbatim. If\nTEST-FORM evaluates to true, run BODY. BODY has access to a local\nmacro COLLECT which can be used to accumulate value (if COLLECT is not\nused, the element is effectively dropped).\n\nThe return value will share structure with SEQ if possible.');
 return FUNC;
 })();
 var l7543={dt_Name: l264,structDescriptors: l2883,NAME0: l7544,TYPE1: l2935,VALUE2: l7545,DECLARATIONS3: l3};
@@ -57971,7 +57912,7 @@ return internals.mvcall(l105.fvalue,l285,l105.fvalue(l271,v18137,l125.fvalue(v18
 })();
 })();
 });
-FUNC.docstring=internals.make_lisp_string(\"Define *, *-IF and *-IF-NOT variants for sequence function OP.\\n\\nBODY has access to SEQUENCE, FROM-END, START, END arguments, and a\\nlocal macro TEST. (TEST x) expand to the appropriate test for each\\nvariant. START and END are already bound checked, and END is set to\\nlength of SEQUENCE if not provided by caller.\\n\\nMORE-REQS are prepended as required arguments and MORE-KEYS are\\nappended as keyword arguments, to all variants' lambda list.\");
+FUNC.docstring=internals.make_lisp_string("Define *, *-IF and *-IF-NOT variants for sequence function OP.\n\nBODY has access to SEQUENCE, FROM-END, START, END arguments, and a\nlocal macro TEST. (TEST x) expand to the appropriate test for each\nvariant. START and END are already bound checked, and END is set to\nlength of SEQUENCE if not provided by caller.\n\nMORE-REQS are prepended as required arguments and MORE-KEYS are\nappended as keyword arguments, to all variants' lambda list.");
 return FUNC;
 })();
 var l7634={dt_Name: l264,structDescriptors: l2883,NAME0: l7635,TYPE1: l2935,VALUE2: l7636,DECLARATIONS3: l3};
@@ -58107,7 +58048,7 @@ return internals.mvcall(l105.fvalue,l130,l105.fvalue(l105.fvalue(l1285,l105.fval
 })();
 })();
 });
-FUNC.docstring=internals.make_lisp_string(\"Check START END bound for SEQ, set END to length of SEQ if it's nil.\\nSEQ, START, END should all be plain variables.\");
+FUNC.docstring=internals.make_lisp_string("Check START END bound for SEQ, set END to length of SEQ if it's nil.\nSEQ, START, END should all be plain variables.");
 return FUNC;
 })();
 var l7722={dt_Name: l264,structDescriptors: l2883,NAME0: l7653,TYPE1: l2935,VALUE2: l7723,DECLARATIONS3: l3};
@@ -58167,7 +58108,7 @@ var l7753=internals.make_lisp_string('MAKE-');
 var l7754=internals.make_lisp_string('-P');
 var l7755=internals.make_lisp_string('COPY-');
 var l7756=internals.make_lisp_string('DUMP-');
-var l7757=internals.make_lisp_string(\"Bad slot description `~S'.\");
+var l7757=internals.make_lisp_string("Bad slot description `~S'.");
 var l7752=(function JSCL_USER_NIL(v18253,v18254){internals.checkArgs(arguments.length,2);
 var v18255=this;
 return (function(){return (function(){return (function(){var v18258=l177.fvalue(v18253.$$jscl_cdr,1);
@@ -58280,7 +58221,7 @@ return (function(v18318,v18319){return internals.mvcall(l105.fvalue,l175,l105.fv
 })();
 })();
 });
-FUNC.docstring=internals.make_lisp_string(\"Similar to `with-collect' with the following differences:\\n  1) However the list where the values are being accumulated is available to the body by the name NAME.\\n  2) The name COLLECTOR function can be passed as a parameter\\n  3) The return value the last form of BODY\");
+FUNC.docstring=internals.make_lisp_string("Similar to `with-collect' with the following differences:\n  1) However the list where the values are being accumulated is available to the body by the name NAME.\n  2) The name COLLECTOR function can be passed as a parameter\n  3) The return value the last form of BODY");
 return FUNC;
 })();
 var l7779={dt_Name: l264,structDescriptors: l2883,NAME0: l7780,TYPE1: l2935,VALUE2: l7781,DECLARATIONS3: l3};
@@ -58302,7 +58243,7 @@ return (function(v18327,v18328){return internals.mvcall(l105.fvalue,l175,l105.fv
 })();
 })();
 });
-FUNC.docstring=internals.make_lisp_string('Makes available to BODY a function named collect. The function accumulates\\nvalues passed to it. The return value of with-collect is the list of values\\naccumulated, in the order.');
+FUNC.docstring=internals.make_lisp_string('Makes available to BODY a function named collect. The function accumulates\nvalues passed to it. The return value of with-collect is the list of values\naccumulated, in the order.');
 return FUNC;
 })();
 var l7791={dt_Name: l264,structDescriptors: l2883,NAME0: l7792,TYPE1: l2935,VALUE2: l7793,DECLARATIONS3: l3};
@@ -58731,7 +58672,7 @@ return internals.mvcall(l105.fvalue,l7744,v18553,l7845,l105.fvalue(l130,l7846,l1
 })();
 });
 var l7843={dt_Name: l264,structDescriptors: l2883,NAME0: l7839,TYPE1: l2935,VALUE2: l7844,DECLARATIONS3: l3};
-var l7865=internals.make_lisp_string(\"ACCESS-FN `~S' must be a symbol.\");
+var l7865=internals.make_lisp_string("ACCESS-FN `~S' must be a symbol.");
 var l7866=internals.QIList(l3538,l3539,l3100,l3);
 var l7867=internals.QIList(l161,l3);
 var l7864=(function JSCL_USER_NIL(v18557,v18558){internals.checkArgs(arguments.length,2);
@@ -59917,7 +59858,7 @@ return internals.mvcall(l46.fvalue,v19133);
 })();
 });
 FUNC.fname=internals.make_lisp_string('EVAL-INTERACTIVE-INPUT');
-FUNC.docstring=internals.make_lisp_string('Evaluate INPUT string. INPUT may contain multiple forms, which are\\nevaluated sequentially. Return the result of the last form in INPUT, or\\nno values if INPUT is empty.');
+FUNC.docstring=internals.make_lisp_string('Evaluate INPUT string. INPUT may contain multiple forms, which are\nevaluated sequentially. Return the result of the last form in INPUT, or\nno values if INPUT is empty.');
 return FUNC;
 })();
 l8022;
@@ -59972,7 +59913,7 @@ return internals.mvcall(l16.fvalue,l3514,l105.fvalue(l432,l8025,l105.fvalue(l598
 })();
 })();
 });
-FUNC.docstring=internals.make_lisp_string('Run BODY and print the results (can be multiple values).\\nAll errors are caught and report to *ERROR-OUTPUT*.');
+FUNC.docstring=internals.make_lisp_string('Run BODY and print the results (can be multiple values).\nAll errors are caught and report to *ERROR-OUTPUT*.');
 return FUNC;
 })());
 var l8065=internals.intern('*BREAK-ON-SIGNALS*','COMMON-LISP');
@@ -60434,7 +60375,7 @@ return internals.values1(v19178);
 })();
 });
 FUNC.fname=internals.make_lisp_string('WELCOME-MESSAGE-ITEMS');
-FUNC.docstring=internals.make_lisp_string('Return the welcome message as a list of markup items.\\nEach item is one of:\\n  (:str STRING)      - plain text\\n  (:bold STRING)     - emphasized text\\n  (:link TEXT URL)   - hyperlink\\n  (:newline)         - line break');
+FUNC.docstring=internals.make_lisp_string('Return the welcome message as a list of markup items.\nEach item is one of:\n  (:str STRING)      - plain text\n  (:bold STRING)     - emphasized text\n  (:link TEXT URL)   - hyperlink\n  (:newline)         - line break');
 return FUNC;
 })();
 l8397;
@@ -60488,9 +60429,9 @@ if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v19203;
 if (typeof x2!='number') internals.typeError(x2,l9);
 return x1<x2?l2.value:l3.value;
-})()!==l3.value){if (v19202!==l3.value) (function(v19206){return l12.fvalue(v19206,'\\n')!==l3.value?(l3.value,v19202=l3.value):l3.value;
+})()!==l3.value){if (v19202!==l3.value) (function(v19206){return l12.fvalue(v19206,'\n')!==l3.value?(l3.value,v19202=l3.value):l3.value;
 })(l30.fvalue(v19197,v19200));
- else if (v19201!==l3.value) (function(v19207){return l12.fvalue(v19207,'\\\\')!==l3.value?(l3.value,(function(){var v19209=1;
+ else if (v19201!==l3.value) (function(v19207){return l12.fvalue(v19207,'\\')!==l3.value?(l3.value,(function(){var v19209=1;
 var v19210=(function(){var x1=v19200;
 if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v19209;
@@ -60498,7 +60439,7 @@ if (typeof x2!='number') internals.typeError(x2,l9);
 return x1+x2;
 })();
 return v19200=v19210;
-})()):l12.fvalue(v19207,'\"')!==l3.value?(l3.value,v19201=l3.value,(function(){var v19212=1;
+})()):l12.fvalue(v19207,'"')!==l3.value?(l3.value,v19201=l3.value,(function(){var v19212=1;
 var v19213=(function(){var x1=v19204;
 if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v19212;
@@ -60508,7 +60449,7 @@ return x1-x2;
 return v19204=v19213;
 })()):l3.value;
 })(l30.fvalue(v19197,v19200));
- else (function(v19214){return l12.fvalue(v19214,';')!==l3.value?(l3.value,v19202=l2.value):l12.fvalue(v19214,'\\\\')!==l3.value?(l3.value,(function(){var v19216=1;
+ else (function(v19214){return l12.fvalue(v19214,';')!==l3.value?(l3.value,v19202=l2.value):l12.fvalue(v19214,'\\')!==l3.value?(l3.value,(function(){var v19216=1;
 var v19217=(function(){var x1=v19200;
 if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v19216;
@@ -60532,7 +60473,7 @@ if (typeof x2!='number') internals.typeError(x2,l9);
 return x1-x2;
 })();
 return v19204=v19223;
-})()):l12.fvalue(v19214,'\"')!==l3.value?(l3.value,(function(){var v19225=1;
+})()):l12.fvalue(v19214,'"')!==l3.value?(l3.value,(function(){var v19225=1;
 var v19226=(function(){var x1=v19204;
 if (typeof x1!='number') internals.typeError(x1,l9);
 var x2=v19225;
@@ -60581,4 +60522,3 @@ var l8431=internals.make_lisp_string('JSCL-XC');
 var l8432=internals.make_lisp_string('JSCL');
 l221.fvalue(l8431,l8432);
 })();
-")
